@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Word"
+            android:id="@+id/textViewWordsListItemWord"
+            android:textColor="@color/color_black"
+            android:layout_alignRight="@+id/textViewWordsListItemTranslation"
+            android:layout_alignEnd="@+id/textViewWordsListItemTranslation"
+            android:layout_alignLeft="@+id/textViewWordsListItemTranslation"
+            android:layout_alignStart="@+id/textViewWordsListItemTranslation"
+            android:singleLine="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="мир"
+            android:id="@+id/textViewWordsListItemTranslation"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:textColor="@color/color_black"
+            android:layout_below="@+id/textViewWordsListItemWord"
+            android:layout_marginLeft="10dp"
+            android:layout_toLeftOf="@+id/imageViewWordsListItemPlayWord"
+            android:layout_toStartOf="@+id/imageViewWordsListItemPlayWord"
+            android:singleLine="true" />
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/imageViewWordsListItemSetFavorite"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_star"
+            android:layout_alignBottom="@+id/textViewWordsListItemTranslation"
+            android:layout_marginRight="10dp" />
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/imageViewWordsListItemPlayWord"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/imageViewWordsListItemSetFavorite"
+            android:layout_toStartOf="@+id/imageViewWordsListItemSetFavorite"
+            android:src="@drawable/ic_sound"
+            android:layout_alignBottom="@+id/imageViewWordsListItemSetFavorite"
+            android:layout_marginRight="15dp" />
+    </RelativeLayout>
+</LinearLayout>

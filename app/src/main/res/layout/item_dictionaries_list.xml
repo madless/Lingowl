@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:background="@color/color_white"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+    <ImageView
+        android:layout_width="45dp"
+        android:layout_height="30dp"
+        android:id="@+id/imageViewDictionaryItemIcon"
+        android:src="@drawable/ic_flag_en"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Английский"
+        android:id="@+id/textViewDictionaryItemTitle"
+        android:textColor="@color/color_black"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:layout_toRightOf="@+id/imageViewDictionaryItemIcon"
+        android:layout_toEndOf="@+id/imageViewDictionaryItemIcon"
+        android:layout_alignBottom="@+id/imageViewDictionaryItemIcon"
+        android:layout_alignParentTop="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="367"
+        android:id="@+id/textViewDictionaryItemCounter"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@+id/textViewDictionaryItemTitle"
+        android:textColor="@color/color_gray"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="(выбран)"
+            android:id="@+id/textViewDictionaryItemStatus"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/textViewDictionaryItemTitle"
+            android:layout_toEndOf="@+id/textViewDictionaryItemTitle"
+            android:textColor="@color/color_gray"
+            android:layout_marginLeft="5dp"
+            android:gravity="center_vertical"
+            android:layout_alignBottom="@+id/textViewDictionaryItemTitle" />
+    </RelativeLayout>
+
+</RelativeLayout>
