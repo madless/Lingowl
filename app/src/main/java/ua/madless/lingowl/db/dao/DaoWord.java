@@ -20,6 +20,7 @@ public class DaoWord {
     public final static String FIELD_PART_OF_SPEECH = "part_of_speech";
     public final static String FIELD_GENDER = "gender";
     public final static String FIELD_NUMBER = "number";
+    final static String FIELD_IS_FAVORITE = "is_favorite";
     public final static String QUERY_CREATE_TABLE = "CREATE TABLE " + TABLE_NAME +
             " ( " +
                 FIELD_ID + " integer primary key, " +
@@ -27,7 +28,8 @@ public class DaoWord {
                 FIELD_TRANSLATION + " text, " +
                 FIELD_PART_OF_SPEECH + " text, " +
                 FIELD_GENDER + " text, " +
-                FIELD_NUMBER + " text " +
+                FIELD_NUMBER + " text, " +
+                FIELD_IS_FAVORITE + " integer " +
             " );";
 
     DBManager dbManager;
@@ -48,6 +50,7 @@ public class DaoWord {
         wordRow.put(FIELD_PART_OF_SPEECH, word.getPartOfSpeech());
         wordRow.put(FIELD_GENDER, word.getGender());
         wordRow.put(FIELD_NUMBER, word.getNumber());
+        wordRow.put(FIELD_IS_FAVORITE, word.isFavorite() ? 1 : 0);
         db.insert(TABLE_NAME, null, wordRow);
 
         ContentValues dictWordRow = new ContentValues();
@@ -75,6 +78,7 @@ public class DaoWord {
             int partOfSpeechColIndex = wordCursor.getColumnIndex(FIELD_PART_OF_SPEECH);
             int genderColIndex = wordCursor.getColumnIndex(FIELD_GENDER);
             int numberColIndex = wordCursor.getColumnIndex(FIELD_NUMBER);
+            int isFavoriteIndex = wordCursor.getColumnIndex(FIELD_IS_FAVORITE);
             do {
                 int id = wordCursor.getInt(idColIndex);
                 String text = wordCursor.getString(textColIndex);
@@ -82,7 +86,8 @@ public class DaoWord {
                 String partOfSpeech = wordCursor.getString(partOfSpeechColIndex);
                 String gender = wordCursor.getString(genderColIndex);
                 String number = wordCursor.getString(numberColIndex);
-                Word word = new Word(id, text, translation, partOfSpeech, gender, number);
+                boolean isFavorite = wordCursor.getInt(isFavoriteIndex) > 0;
+                Word word = new Word(id, text, translation, partOfSpeech, gender, number, isFavorite);
                 words.add(word);
             } while (wordCursor.moveToNext());
         } else {
@@ -111,6 +116,7 @@ public class DaoWord {
             int partOfSpeechColIndex = wordCursor.getColumnIndex(FIELD_PART_OF_SPEECH);
             int genderColIndex = wordCursor.getColumnIndex(FIELD_GENDER);
             int numberColIndex = wordCursor.getColumnIndex(FIELD_NUMBER);
+            int isFavoriteIndex = wordCursor.getColumnIndex(FIELD_IS_FAVORITE);
             do {
                 int id = wordCursor.getInt(idColIndex);
                 String text = wordCursor.getString(textColIndex);
@@ -118,7 +124,8 @@ public class DaoWord {
                 String partOfSpeech = wordCursor.getString(partOfSpeechColIndex);
                 String gender = wordCursor.getString(genderColIndex);
                 String number = wordCursor.getString(numberColIndex);
-                Word word = new Word(id, text, translation, partOfSpeech, gender, number);
+                boolean isFavorite = wordCursor.getInt(isFavoriteIndex) > 0;
+                Word word = new Word(id, text, translation, partOfSpeech, gender, number, isFavorite);
                 words.add(word);
             } while (wordCursor.moveToNext());
         } else {
@@ -159,6 +166,7 @@ public class DaoWord {
             int partOfSpeechColIndex = wordCursor.getColumnIndex(FIELD_PART_OF_SPEECH);
             int genderColIndex = wordCursor.getColumnIndex(FIELD_GENDER);
             int numberColIndex = wordCursor.getColumnIndex(FIELD_NUMBER);
+            int isFavoriteIndex = wordCursor.getColumnIndex(FIELD_IS_FAVORITE);
             do {
                 int id = wordCursor.getInt(idColIndex);
                 String text = wordCursor.getString(textColIndex);
@@ -166,7 +174,8 @@ public class DaoWord {
                 String partOfSpeech = wordCursor.getString(partOfSpeechColIndex);
                 String gender = wordCursor.getString(genderColIndex);
                 String number = wordCursor.getString(numberColIndex);
-                Word word = new Word(id, text, translation, partOfSpeech, gender, number);
+                boolean isFavorite = wordCursor.getInt(isFavoriteIndex) > 0;
+                Word word = new Word(id, text, translation, partOfSpeech, gender, number, isFavorite);
                 words.add(word);
             } while (wordCursor.moveToNext());
         } else {

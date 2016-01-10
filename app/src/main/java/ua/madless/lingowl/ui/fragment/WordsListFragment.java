@@ -14,11 +14,13 @@ import java.util.ArrayList;
 
 import ua.madless.lingowl.R;
 import ua.madless.lingowl.adapter.CategoriesListAdapter;
+import ua.madless.lingowl.adapter.WordsListAdapter;
 import ua.madless.lingowl.model.Category;
+import ua.madless.lingowl.model.Word;
 
-public class WordsListFragment extends Fragment {
+public class WordsListFragment extends BaseListFragment {
     RecyclerView recyclerViewWordsList;
-    ArrayList<Category> categories;
+    ArrayList<Word> words;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -27,24 +29,48 @@ public class WordsListFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
-        recyclerViewCategoriesList.setLayoutManager(layoutManager);
-        recyclerViewCategoriesList.setItemAnimator(itemAnimator);
-        categories = getDefaultCategories();
-        CategoriesListAdapter categoriesListAdapter = new CategoriesListAdapter(getActivity(), categories);
-        recyclerViewCategoriesList.setAdapter(categoriesListAdapter);
+        recyclerViewWordsList.setLayoutManager(layoutManager);
+        recyclerViewWordsList.setItemAnimator(itemAnimator);
+        words = getWords();
+        WordsListAdapter wordsListAdapter = new WordsListAdapter(getActivity(), words);
+        recyclerViewWordsList.setAdapter(wordsListAdapter);
         setHasOptionsMenu(true);
         return root;
     }
 
-    private ArrayList<Category> getDefaultCategories() {
-        ArrayList<Category> categories = new ArrayList<>();
-        categories.add(new Category(0, "Избранное", 0, 5));
-        categories.add(new Category(1, "Книги", 1, 15));
-        categories.add(new Category(2, "Семья", 2, 54));
-        categories.add(new Category(3, "Кино", 3, 12));
-        categories.add(new Category(4, "Технологии", 4, 0));
-        categories.add(new Category(4, "Путешествия", -1, 12));
-        return categories;
+    ArrayList<Word> getWords() {
+        ArrayList<Word> words = new ArrayList<>();
+        words.add(new Word(0, "Hello", "привет", true));
+        words.add(new Word(1, "World", "мир", false));
+        words.add(new Word(2, "Test", "тест", false));
+        words.add(new Word(0, "Hello", "привет", true));
+        words.add(new Word(1, "World", "мир", false));
+        words.add(new Word(2, "Test", "тест", false));
+        words.add(new Word(0, "Hello", "привет", true));
+        words.add(new Word(1, "World", "мир", false));
+        words.add(new Word(2, "Test", "тест", false));
+        words.add(new Word(0, "Hello", "привет", true));
+        words.add(new Word(1, "World", "мир", false));
+        words.add(new Word(2, "Test", "тест", false));
+        words.add(new Word(0, "Hello", "привет", true));
+        words.add(new Word(1, "World", "мир", false));
+        words.add(new Word(2, "Test", "тест", false));
+        words.add(new Word(0, "Hello", "привет", true));
+        words.add(new Word(1, "World", "мир", false));
+        words.add(new Word(2, "Test", "тест", false));
+        words.add(new Word(0, "Hello", "привет", true));
+        words.add(new Word(1, "World", "мир", false));
+        words.add(new Word(2, "Test", "тест", false));
+        words.add(new Word(0, "Hello", "привет", true));
+        words.add(new Word(1, "World", "мир", false));
+        words.add(new Word(2, "Test", "тест", false));
+        words.add(new Word(0, "Hello", "привет", true));
+        words.add(new Word(1, "World", "мир", false));
+        words.add(new Word(2, "Test", "тест", false));
+        words.add(new Word(0, "Hello", "привет", true));
+        words.add(new Word(1, "World", "мир", false));
+        words.add(new Word(2, "Test", "тест", false));
+        return words;
     }
 
     @Override

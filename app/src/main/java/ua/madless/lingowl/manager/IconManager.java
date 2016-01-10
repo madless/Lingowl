@@ -60,4 +60,12 @@ public class IconManager {
             }
         }
     }
+
+    public Drawable getFavoriteIcon(boolean isFavorite) {
+        if(isFavorite) {
+            return ContextCompat.getDrawable(context, R.mipmap.ic_favorite);
+        } else {
+            return ContextCompat.getDrawable(context, R.mipmap.ic_not_favorite);
+        }
+    }
 }

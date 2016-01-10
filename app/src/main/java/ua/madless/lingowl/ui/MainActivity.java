@@ -26,9 +26,11 @@ import com.squareup.otto.Subscribe;
 import ua.madless.lingowl.R;
 import ua.madless.lingowl.constants.Transfer;
 import ua.madless.lingowl.manager.EventBusManager;
+import ua.madless.lingowl.model.Category;
 import ua.madless.lingowl.model.Dictionary;
 import ua.madless.lingowl.ui.fragment.CategoriesListFragment;
 import ua.madless.lingowl.ui.fragment.DictionariesListFragment;
+import ua.madless.lingowl.ui.fragment.WordsListFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -186,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Subscribe
-    public void onNewDictionarySelected(Dictionary dictionary) {
+    public void onDictionarySelected(Dictionary dictionary) {
         Log.d("mylog", "onNewDictionarySelected");
         this.selectedDictionary = dictionary;
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -195,6 +197,19 @@ public class MainActivity extends AppCompatActivity {
         arguments.putParcelable(Transfer.SELECTED_DICTIONARY.toString(), selectedDictionary);
         currentFragment.setArguments(arguments);
         toolbar.setTitle("Категории (" + selectedDictionary.getCodeTargetLanguage() + ")");
+        fragmentTransaction.replace(R.id.content, currentFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    @Subscribe
+    public void onCategorySelected(Category category) {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Fragment currentFragment = new WordsListFragment();
+        Bundle arguments = new Bundle();
+        arguments.putParcelable(Transfer.SELECTED_CATEGORY.toString(), category);
+        currentFragment.setArguments(arguments);
+        toolbar.setTitle(category.getName());
         fragmentTransaction.replace(R.id.content, currentFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();

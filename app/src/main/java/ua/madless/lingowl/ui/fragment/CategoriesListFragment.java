@@ -9,10 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.squareup.otto.Bus;
+
 import java.util.ArrayList;
 
 import ua.madless.lingowl.R;
 import ua.madless.lingowl.adapter.CategoriesListAdapter;
+import ua.madless.lingowl.manager.EventBusManager;
 import ua.madless.lingowl.model.Category;
 
 /**
@@ -51,6 +54,7 @@ public class CategoriesListFragment extends BaseListFragment {
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
-
+        Bus bus = EventBusManager.getBus();
+        bus.post(categories.get(position));
     }
 }
