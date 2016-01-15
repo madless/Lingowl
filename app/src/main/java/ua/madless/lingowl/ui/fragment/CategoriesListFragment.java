@@ -15,12 +15,10 @@ import java.util.ArrayList;
 
 import ua.madless.lingowl.R;
 import ua.madless.lingowl.adapter.CategoriesListAdapter;
+import ua.madless.lingowl.listener.RecyclerItemClickListener;
 import ua.madless.lingowl.manager.EventBusManager;
 import ua.madless.lingowl.model.Category;
 
-/**
- * Created by madless on 06.01.2016.
- */
 public class CategoriesListFragment extends BaseListFragment {
     RecyclerView recyclerViewCategoriesList;
     ArrayList<Category> categories;
@@ -32,11 +30,15 @@ public class CategoriesListFragment extends BaseListFragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
+
         recyclerViewCategoriesList.setLayoutManager(layoutManager);
         recyclerViewCategoriesList.setItemAnimator(itemAnimator);
         categories = getDefaultCategories();
+
         CategoriesListAdapter categoriesListAdapter = new CategoriesListAdapter(getActivity(), categories);
+
         recyclerViewCategoriesList.setAdapter(categoriesListAdapter);
+        recyclerViewCategoriesList.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), recyclerViewCategoriesList, this));
         setHasOptionsMenu(true);
         return root;
     }

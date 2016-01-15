@@ -17,10 +17,10 @@ import java.nio.channels.FileChannel;
 import java.sql.SQLException;
 
 import ua.madless.lingowl.db.dao.DaoCategory;
-import ua.madless.lingowl.db.dao.DaoDictWord;
+import ua.madless.lingowl.db.dao.DaoDictCat;
 import ua.madless.lingowl.db.dao.DaoDictionary;
 import ua.madless.lingowl.db.dao.DaoWord;
-import ua.madless.lingowl.db.dao.DaoWordCat;
+import ua.madless.lingowl.db.dao.DaoCatWord;
 
 public class DBHelper extends SQLiteOpenHelper {
     private Context context;
@@ -114,8 +114,9 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(DaoDictionary.QUERY_CREATE_TABLE);
         db.execSQL(DaoWord.QUERY_CREATE_TABLE);
         db.execSQL(DaoCategory.QUERY_CREATE_TABLE);
-        db.execSQL(DaoDictWord.QUERY_CREATE_LINK_TABLE);
-        db.execSQL(DaoWordCat.QUERY_CREATE_LINK_TABLE);
+        //db.execSQL(DaoDictWord.QUERY_CREATE_LINK_TABLE);
+        db.execSQL(DaoDictCat.QUERY_CREATE_LINK_TABLE);
+        db.execSQL(DaoCatWord.QUERY_CREATE_LINK_TABLE);
     }
 
     @Override

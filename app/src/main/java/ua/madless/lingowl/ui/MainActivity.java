@@ -74,7 +74,11 @@ public class MainActivity extends AppCompatActivity {
         if (drawerResult.isDrawerOpen()) {
             drawerResult.closeDrawer();
         } else {
-            super.onBackPressed();
+            if(fragmentManager.getBackStackEntryCount() > 0) {
+                fragmentManager.popBackStack();
+            } else {
+                super.onBackPressed();
+            }
         }
     }
 
@@ -204,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe
     public void onCategorySelected(Category category) {
+        Log.d("mylog_ui", "category selected");
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Fragment currentFragment = new WordsListFragment();
         Bundle arguments = new Bundle();

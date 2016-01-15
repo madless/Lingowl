@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FABActivity">
+    tools:context=".FABActivity"
+    android:background="@color/color_light_gray">
 
     <EditText
         android:layout_width="match_parent"

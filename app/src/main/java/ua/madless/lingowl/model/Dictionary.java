@@ -13,14 +13,16 @@ public class Dictionary implements Parcelable {
     String codeNativeLanguage;
     int iconId;
     int wordCounter;
+    int dictType;
 
-    public Dictionary(int id, String name, String codeTargetLanguage, String codeNativeLanguage, int iconId, int wordCounter) {
+    public Dictionary(int id, String name, String codeTargetLanguage, String codeNativeLanguage, int iconId, int wordCounter, int dictType) {
         this.id = id;
         this.name = name;
         this.codeTargetLanguage = codeTargetLanguage;
         this.codeNativeLanguage = codeNativeLanguage;
         this.iconId = iconId;
         this.wordCounter = wordCounter;
+        this.dictType = dictType;
     }
 
     public int getWordCounter() {
@@ -55,6 +57,10 @@ public class Dictionary implements Parcelable {
         return codeNativeLanguage;
     }
 
+    public int getDictType() {
+        return dictType;
+    }
+
     @Override
     public String toString() {
         return "Dictionary{" +
@@ -73,6 +79,7 @@ public class Dictionary implements Parcelable {
         codeNativeLanguage = parcel.readString();
         iconId = parcel.readInt();
         wordCounter = parcel.readInt();
+        dictType = parcel.readInt();
     }
 
     public static final Creator<Dictionary> CREATOR = new Creator<Dictionary>() {
@@ -100,5 +107,6 @@ public class Dictionary implements Parcelable {
         dest.writeString(getCodeNativeLanguage());
         dest.writeInt(getIconId());
         dest.writeInt(getWordCounter());
+        dest.writeInt(getDictType());
     }
 }

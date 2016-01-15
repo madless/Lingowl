@@ -8,6 +8,7 @@ import android.util.Log;
 import java.util.ArrayList;
 
 import ua.madless.lingowl.db.DBManager;
+import ua.madless.lingowl.db.DaoDictWord;
 import ua.madless.lingowl.model.Category;
 import ua.madless.lingowl.model.Word;
 
@@ -62,8 +63,8 @@ public class DaoCategory {
         db.insert(TABLE_NAME, null, categoryRow);
 
         ContentValues wordCatRow = new ContentValues();
-        wordCatRow.put(DaoWordCat.LINK_FIELD_ID_WORD, word.getId());
-        wordCatRow.put(DaoWordCat.LINK_FIELD_ID_CAT, category.getId());
+        wordCatRow.put(DaoCatWord.LINK_FIELD_ID_WORD, word.getId());
+        wordCatRow.put(DaoCatWord.LINK_FIELD_ID_CAT, category.getId());
         db.insert(DaoDictWord.LINK_TABLE_NAME, null, wordCatRow);
 
         Log.d("mylog", "category inserted: " + category.toString());
@@ -74,8 +75,8 @@ public class DaoCategory {
         dbManager.open();
         SQLiteDatabase db = dbManager.getDatabase();
         ContentValues wordCatRow = new ContentValues();
-        wordCatRow.put(DaoWordCat.LINK_FIELD_ID_WORD, word.getId());
-        wordCatRow.put(DaoWordCat.LINK_FIELD_ID_CAT, category.getId());
+        wordCatRow.put(DaoCatWord.LINK_FIELD_ID_WORD, word.getId());
+        wordCatRow.put(DaoCatWord.LINK_FIELD_ID_CAT, category.getId());
         db.insert(DaoDictWord.LINK_TABLE_NAME, null, wordCatRow);
         Log.d("mylog", "word " + word.getText() + " joined to category: " + category.getName());
         dbManager.close();
@@ -86,8 +87,8 @@ public class DaoCategory {
         SQLiteDatabase db = dbManager.getDatabase();
         ArrayList<Category> categories = new ArrayList<>();
         String selection = "SELECT c." + FIELD_ID + ", c." + FIELD_NAME +
-                " FROM " + TABLE_NAME + " as c, " + DaoWordCat.LINK_TABLE_NAME + " as wc " +
-                " WHERE wc." + DaoWordCat.LINK_FIELD_ID_WORD + " = ? AND c." + FIELD_ID + " = wc." + DaoWordCat.LINK_FIELD_ID_CAT;
+                " FROM " + TABLE_NAME + " as c, " + DaoCatWord.LINK_TABLE_NAME + " as wc " +
+                " WHERE wc." + DaoCatWord.LINK_FIELD_ID_WORD + " = ? AND c." + FIELD_ID + " = wc." + DaoCatWord.LINK_FIELD_ID_CAT;
         String[] selectionArgs = {String.valueOf(word.getId())};
         Cursor categoryCursor = db.rawQuery(selection, selectionArgs);
         if(categoryCursor.moveToFirst()) {

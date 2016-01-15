@@ -1,9 +1,9 @@
 package ua.madless.lingowl.adapter;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +43,7 @@ public class WordsListAdapter extends RecyclerView.Adapter<WordsListAdapter.View
 
     @Override
     public int getItemCount() {
-        return 0;
+        return words.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -58,6 +58,7 @@ public class WordsListAdapter extends RecyclerView.Adapter<WordsListAdapter.View
             imageViewWordsListItemSetFavorite = (ImageView) root.findViewById(R.id.imageViewWordsListItemSetFavorite);
             imageViewWordsListItemPlayWord = (ImageView) root.findViewById(R.id.imageViewWordsListItemPlayWord);
             imageViewWordsListItemPlayWord.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_sound));
+            Log.d("mylog_adapter", "view holder created");
         }
 
         public ImageView getImageViewWordsListItemPlayWord() {

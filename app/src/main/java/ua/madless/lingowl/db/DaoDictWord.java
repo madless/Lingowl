@@ -1,4 +1,4 @@
-package ua.madless.lingowl.db.dao;
+package ua.madless.lingowl.db;
 
 /**
  * Created by madless on 02.01.2016.

@@ -14,22 +14,24 @@ import ua.madless.lingowl.model.Dictionary;
  * Created by madless on 02.01.2016.
  */
 public class DaoDictionary {
-    public final static String TABLE_NAME = "dictionary";
-    public final static String FIELD_ID = "_ID";
-    public final static String FIELD_NAME = "name";
-    public final static String FIELD_CODE_TARGET_LANGUAGE = "code_target_language";
-    public final static String FIELD_CODE_NATIVE_LANGUAGE = "code_native_language";
-    public final static String FIELD_ICON_ID = "icon_id";
-    public final static String FIELD_WORD_COUNTER = "word_counter";
+    private final static String TABLE_NAME = "dictionary";
+    private final static String FIELD_ID = "_ID";
+    private final static String FIELD_NAME = "name";
+    private final static String FIELD_CODE_TARGET_LANGUAGE = "code_target_language";
+    private final static String FIELD_CODE_NATIVE_LANGUAGE = "code_native_language";
+    private final static String FIELD_ICON_ID = "icon_id";
+    private final static String FIELD_WORD_COUNTER = "word_counter";
+    private final static String FIELD_DICT_TYPE = "dict_type";
 
     public final static String QUERY_CREATE_TABLE = "CREATE TABLE " + TABLE_NAME +
             " ( " +
                 FIELD_ID + " integer primary key, " +
                 FIELD_NAME + " text, " +
                 FIELD_CODE_TARGET_LANGUAGE + " text, " +
-                FIELD_CODE_NATIVE_LANGUAGE + " text " +
-                FIELD_ICON_ID + " integer " +
-                FIELD_WORD_COUNTER  + " integer " +
+                FIELD_CODE_NATIVE_LANGUAGE + " text, " +
+                FIELD_ICON_ID + " integer, " +
+                FIELD_WORD_COUNTER  + " integer, " +
+                FIELD_DICT_TYPE + " integer " +
             " );";
 
     DBManager dbManager;
@@ -49,6 +51,7 @@ public class DaoDictionary {
         dictionaryRow.put(FIELD_CODE_NATIVE_LANGUAGE, dictionary.getCodeNativeLanguage());
         dictionaryRow.put(FIELD_ICON_ID, dictionary.getIconId());
         dictionaryRow.put(FIELD_WORD_COUNTER, dictionary.getWordCounter());
+        dictionaryRow.put(FIELD_DICT_TYPE, dictionary.getDictType());
         db.insert(TABLE_NAME, null, dictionaryRow);
         Log.d("mylog", "dictionary inserted: " + dictionary.toString());
         dbManager.close();
@@ -66,13 +69,16 @@ public class DaoDictionary {
             int codeNativeLanguageColIndex = dictionaryCursor.getColumnIndex(FIELD_CODE_NATIVE_LANGUAGE);
             int iconIdColIndex = dictionaryCursor.getColumnIndex(FIELD_ICON_ID);
             int wordCounterColIndex = dictionaryCursor.getColumnIndex(FIELD_WORD_COUNTER);
+            int dictTypeColIndex = dictionaryCursor.getColumnIndex(FIELD_DICT_TYPE);
             do {
                 int id = dictionaryCursor.getInt(idColIndex);
                 String name = dictionaryCursor.getString(nameColIndex);
                 String codeTargetLanguage = dictionaryCursor.getString(codeTargetLanguageColIndex);
                 String codeNativeLanguage = dictionaryCursor.getString(codeNativeLanguageColIndex);
                 int iconId = dictionaryCursor.getInt(iconIdColIndex);
-                Dictionary dictionary = new Dictionary(id, name, codeTargetLanguage, codeNativeLanguage, iconId, wordCounterColIndex);
+                int wordCounter = dictionaryCursor.getInt(wordCounterColIndex);
+                int dictType = dictionaryCursor.getInt(dictTypeColIndex);
+                Dictionary dictionary = new Dictionary(id, name, codeTargetLanguage, codeNativeLanguage, iconId, wordCounter, dictType);
                 dictionaries.add(dictionary);
             } while (dictionaryCursor.moveToNext());
         } else {
