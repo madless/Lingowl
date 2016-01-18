@@ -25,6 +25,16 @@ public class Dictionary implements Parcelable {
         this.dictType = dictType;
     }
 
+    public Dictionary(String name, String codeTargetLanguage, String codeNativeLanguage, int iconId, int wordCounter, int dictType) {
+        this.name = name;
+        this.codeTargetLanguage = codeTargetLanguage;
+        this.codeNativeLanguage = codeNativeLanguage;
+        this.iconId = iconId;
+        this.wordCounter = wordCounter;
+        this.dictType = dictType;
+        this.id = -1;
+    }
+
     public int getWordCounter() {
         return wordCounter;
     }

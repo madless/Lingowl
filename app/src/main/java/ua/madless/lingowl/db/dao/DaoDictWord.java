@@ -10,28 +10,28 @@ import ua.madless.lingowl.model.Dictionary;
 import ua.madless.lingowl.model.Word;
 
 /**
- * Created by madless on 12.01.2016.
+ * Created by madless on 02.01.2016.
  */
-public class DaoDictCat extends BaseDao {
+public class DaoDictWord extends BaseDao {
     DBManager dbManager;
-    public final static String LINK_TABLE_NAME = "dict_cat";
+    public final static String LINK_TABLE_NAME = "dict_word";
+    public final static String LINK_FIELD_ID_WORD = "id_word";
     public final static String LINK_FIELD_ID_DICT = "id_dict";
-    public final static String LINK_FIELD_ID_CAT = "id_cat";
     public final static String QUERY_CREATE_LINK_TABLE = "CREATE TABLE " + LINK_TABLE_NAME +
             " ( " +
-            LINK_FIELD_ID_CAT + " integer, " +
-            LINK_FIELD_ID_DICT + " integer " +
+            LINK_FIELD_ID_DICT + " integer, " +
+            LINK_FIELD_ID_WORD + " integer " +
             " );";
 
-    public DaoDictCat(DBManager dbManager) {
+    public DaoDictWord(DBManager dbManager) {
         this.dbManager = dbManager;
     }
 
-    public void linkDictionaryWithCategory(Dictionary dictionary, Category category) {
+    public void linkDictionaryWithWord(Dictionary dictionary, Word word) {
         dbManager.open();
         SQLiteDatabase db = dbManager.getDatabase();
         ContentValues wordCatRow = new ContentValues();
-        wordCatRow.put(LINK_FIELD_ID_CAT, category.getId());
+        wordCatRow.put(LINK_FIELD_ID_WORD, word.getId());
         wordCatRow.put(LINK_FIELD_ID_DICT, dictionary.getId());
         db.insert(LINK_TABLE_NAME, null, wordCatRow);
         dbManager.close();

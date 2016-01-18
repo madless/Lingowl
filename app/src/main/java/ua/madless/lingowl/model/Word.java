@@ -25,6 +25,16 @@ public class Word implements Parcelable {
         this.isFavorite = isFavorite;
     }
 
+    public Word(String text, String translation, String gender, String partOfSpeech, String number, boolean isFavorite) {
+        this.text = text;
+        this.translation = translation;
+        this.gender = gender;
+        this.partOfSpeech = partOfSpeech;
+        this.number = number;
+        this.isFavorite = isFavorite;
+        this.id = -1;
+    }
+
     public Word(int id, String text, String translation, boolean isFavorite) {
         this.id = id;
         this.text = text;

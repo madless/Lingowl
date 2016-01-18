@@ -46,10 +46,10 @@ public class DictionariesListFragment extends BaseListFragment {
 
     private ArrayList<Dictionary> getDefaultDictionaries() {
         ArrayList<Dictionary> dictionaries = new ArrayList<>();
-        dictionaries.add(new Dictionary(0, "Английский", "en", "ru", 0, 34));
-        dictionaries.add(new Dictionary(1, "Немецкий", "de", "ru", 1, 32));
-        dictionaries.add(new Dictionary(2, "Французский", "fr", "ru", 2, 12));
-        dictionaries.add(new Dictionary(3, "Испанский", "es", "ru", 4, 0));
+        dictionaries.add(new Dictionary(0, "Английский", "en", "ru", 0, 34, 1));
+        dictionaries.add(new Dictionary(1, "Немецкий", "de", "ru", 1, 32, 1));
+        dictionaries.add(new Dictionary(2, "Французский", "fr", "ru", 2, 12, 1));
+        dictionaries.add(new Dictionary(3, "Испанский", "es", "ru", 4, 0, 1));
         return dictionaries;
     }
 

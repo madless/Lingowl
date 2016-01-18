@@ -8,16 +8,15 @@ import android.util.Log;
 import java.util.ArrayList;
 
 import ua.madless.lingowl.db.DBManager;
-import ua.madless.lingowl.db.DaoDictWord;
 import ua.madless.lingowl.model.Category;
+import ua.madless.lingowl.model.Dictionary;
 import ua.madless.lingowl.model.Word;
 
 /**
  * Created by madless on 02.01.2016.
  */
-public class DaoCategory {
+public class DaoCategory extends RealModelDao {
     public final static String TABLE_NAME = "category";
-    public final static String FIELD_ID = "_ID";
     public final static String FIELD_NAME = "name";
     public final static String FIELD_ICON_ID = "icon_id";
     public final static String FIELD_WORD_COUNTER = "word_counter";
@@ -29,7 +28,7 @@ public class DaoCategory {
                 FIELD_WORD_COUNTER + " integer " +
             " );";
 
-    DBManager dbManager;
+
 
     public DaoCategory(DBManager dbManager) {
         this.dbManager = dbManager;
@@ -39,50 +38,17 @@ public class DaoCategory {
     public void addCategory(Category category) {
         dbManager.open();
         SQLiteDatabase db = dbManager.getDatabase();
-
         ContentValues categoryRow = new ContentValues();
         categoryRow.put(FIELD_ID, category.getId());
         categoryRow.put(FIELD_NAME, category.getName());
         categoryRow.put(FIELD_ICON_ID, category.getIconId());
         categoryRow.put(FIELD_WORD_COUNTER, category.getWordCounter());
         db.insert(TABLE_NAME, null, categoryRow);
-
         Log.d("mylog", "category inserted: " + category.toString());
         dbManager.close();
     }
 
-    public void addCategory(Word word, Category category) {
-        dbManager.open();
-        SQLiteDatabase db = dbManager.getDatabase();
-
-        ContentValues categoryRow = new ContentValues();
-        categoryRow.put(FIELD_ID, category.getId());
-        categoryRow.put(FIELD_NAME, category.getName());
-        categoryRow.put(FIELD_ICON_ID, category.getIconId());
-        categoryRow.put(FIELD_WORD_COUNTER, category.getWordCounter());
-        db.insert(TABLE_NAME, null, categoryRow);
-
-        ContentValues wordCatRow = new ContentValues();
-        wordCatRow.put(DaoCatWord.LINK_FIELD_ID_WORD, word.getId());
-        wordCatRow.put(DaoCatWord.LINK_FIELD_ID_CAT, category.getId());
-        db.insert(DaoDictWord.LINK_TABLE_NAME, null, wordCatRow);
-
-        Log.d("mylog", "category inserted: " + category.toString());
-        dbManager.close();
-    }
-
-    public void joinCategoryAndWord(Category category, Word word) {
-        dbManager.open();
-        SQLiteDatabase db = dbManager.getDatabase();
-        ContentValues wordCatRow = new ContentValues();
-        wordCatRow.put(DaoCatWord.LINK_FIELD_ID_WORD, word.getId());
-        wordCatRow.put(DaoCatWord.LINK_FIELD_ID_CAT, category.getId());
-        db.insert(DaoDictWord.LINK_TABLE_NAME, null, wordCatRow);
-        Log.d("mylog", "word " + word.getText() + " joined to category: " + category.getName());
-        dbManager.close();
-    }
-
-    public ArrayList<Category> getCategories(Word word) {
+    public ArrayList<Category> getCategoriesInWord(Word word) {
         dbManager.open();
         SQLiteDatabase db = dbManager.getDatabase();
         ArrayList<Category> categories = new ArrayList<>();
@@ -110,6 +76,36 @@ public class DaoCategory {
         categoryCursor.close();
         dbManager.close();
         Log.d("mylog", "Category in word " + word.getText() + ": " + categories);
+        return categories;
+    }
+
+    public ArrayList<Category> getCategoriesInDictionary(Dictionary dictionary) {
+        dbManager.open();
+        SQLiteDatabase db = dbManager.getDatabase();
+        ArrayList<Category> categories = new ArrayList<>();
+        String selection = "SELECT c." + FIELD_ID + ", c." + FIELD_NAME +
+                " FROM " + TABLE_NAME + " as c, " + DaoDictCat.LINK_TABLE_NAME + " as dc " +
+                " WHERE dc." + DaoDictCat.LINK_FIELD_ID_DICT + " = ? AND c." + FIELD_ID + " = dc." + DaoDictCat.LINK_FIELD_ID_CAT;
+        String[] selectionArgs = {String.valueOf(dictionary.getId())};
+        Cursor categoryCursor = db.rawQuery(selection, selectionArgs);
+        if(categoryCursor.moveToFirst()) {
+            int idColIndex = categoryCursor.getColumnIndex(FIELD_ID);
+            int nameColIndex = categoryCursor.getColumnIndex(FIELD_NAME);
+            int iconIdColIndex = categoryCursor.getColumnIndex(FIELD_ICON_ID);
+            int wordCounterColIndex = categoryCursor.getColumnIndex(FIELD_WORD_COUNTER);
+            do {
+                int id = categoryCursor.getInt(idColIndex);
+                String name = categoryCursor.getString(nameColIndex);
+                int iconId = categoryCursor.getInt(iconIdColIndex);
+                int wordCounter = categoryCursor.getInt(wordCounterColIndex);
+                Category category = new Category(id, name, iconId, wordCounter);
+                categories.add(category);
+            } while (categoryCursor.moveToNext());
+        } else {
+            Log.d("mylog", "NO ROWS IN TABLE " + TABLE_NAME);
+        }
+        categoryCursor.close();
+        dbManager.close();
         return categories;
     }
 
@@ -152,4 +148,8 @@ public class DaoCategory {
         dbManager.close();
     }
 
+    @Override
+    String getTableName() {
+        return TABLE_NAME;
+    }
 }

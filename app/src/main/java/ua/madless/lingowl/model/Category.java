@@ -19,6 +19,13 @@ public class Category implements Parcelable {
         this.wordCounter = wordCounter;
     }
 
+    public Category(String name, int iconId, int wordCounter) {
+        this.name = name;
+        this.iconId = iconId;
+        this.wordCounter = wordCounter;
+        this.id = -1;
+    }
+
     public int getWordCounter() {
         return wordCounter;
     }

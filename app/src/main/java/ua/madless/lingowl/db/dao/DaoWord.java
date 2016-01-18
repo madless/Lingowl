@@ -8,14 +8,13 @@ import android.util.Log;
 import java.util.ArrayList;
 
 import ua.madless.lingowl.db.DBManager;
-//import ua.madless.lingowl.db.DaoDictWord;
+//import ua.madless.lingowl.db.dao.DaoDictWord;
 import ua.madless.lingowl.model.Category;
 import ua.madless.lingowl.model.Dictionary;
 import ua.madless.lingowl.model.Word;
 
-public class DaoWord {
+public class DaoWord extends RealModelDao {
     public final static String TABLE_NAME = "words";
-    public final static String FIELD_ID = "_ID";
     public final static String FIELD_TEXT = "text";
     public final static String FIELD_TRANSLATION = "translation";
     public final static String FIELD_PART_OF_SPEECH = "part_of_speech";
@@ -33,17 +32,14 @@ public class DaoWord {
                 FIELD_IS_FAVORITE + " integer " +
             " );";
 
-    DBManager dbManager;
-
     public DaoWord(DBManager dbManager) {
         this.dbManager = dbManager;
         dbManager.createDatabase();
     }
 
-    public void addWord(Category category, Word word) {
+    public void addWord(Word word) {
         dbManager.open();
         SQLiteDatabase db = dbManager.getDatabase();
-
         ContentValues wordRow = new ContentValues();
         wordRow.put(FIELD_ID, word.getId());
         wordRow.put(FIELD_TEXT, word.getText());
@@ -54,16 +50,47 @@ public class DaoWord {
         wordRow.put(FIELD_IS_FAVORITE, word.isFavorite() ? 1 : 0);
         db.insert(TABLE_NAME, null, wordRow);
 
-        ContentValues catWordRow = new ContentValues();
-        catWordRow.put(DaoCatWord.LINK_FIELD_ID_CAT, category.getId());
-//        dictWordRow.put(DaoDictWord.LINK_FIELD_ID_WORD, word.getId());
-//        db.insert(DaoDictWord.LINK_TABLE_NAME, null, dictWordRow);
-
         Log.d("mylog", "word inserted: " + word.toString());
         dbManager.close();
     }
 
-    public ArrayList<Word> getWords(Dictionary dictionary) {
+    public ArrayList<Word> getWordsInCategory(Category category) {
+        dbManager.open();
+        SQLiteDatabase db = dbManager.getDatabase();
+        ArrayList<Word> words = new ArrayList<>();
+        String selection = "SELECT w." + FIELD_ID + ", w." + FIELD_TEXT + ", w." + FIELD_TRANSLATION + ", w." + FIELD_PART_OF_SPEECH + ", w." + FIELD_GENDER + ", w." + FIELD_NUMBER +
+                " FROM " + TABLE_NAME + " as w, " + DaoCatWord.LINK_TABLE_NAME + " as dw " +
+                " WHERE dw." + DaoCatWord.LINK_FIELD_ID_CAT + " = ? AND w." + FIELD_ID + " = dw." + DaoCatWord.LINK_FIELD_ID_WORD;
+        String[] selectionArgs = {String.valueOf(category.getId())};
+        Cursor wordCursor = db.rawQuery(selection, selectionArgs);
+        if(wordCursor.moveToFirst()) {
+            int idColIndex = wordCursor.getColumnIndex(FIELD_ID);
+            int textColIndex = wordCursor.getColumnIndex(FIELD_TEXT);
+            int translationColIndex = wordCursor.getColumnIndex(FIELD_TRANSLATION);
+            int partOfSpeechColIndex = wordCursor.getColumnIndex(FIELD_PART_OF_SPEECH);
+            int genderColIndex = wordCursor.getColumnIndex(FIELD_GENDER);
+            int numberColIndex = wordCursor.getColumnIndex(FIELD_NUMBER);
+            int isFavoriteIndex = wordCursor.getColumnIndex(FIELD_IS_FAVORITE);
+            do {
+                int id = wordCursor.getInt(idColIndex);
+                String text = wordCursor.getString(textColIndex);
+                String translation = wordCursor.getString(translationColIndex);
+                String partOfSpeech = wordCursor.getString(partOfSpeechColIndex);
+                String gender = wordCursor.getString(genderColIndex);
+                String number = wordCursor.getString(numberColIndex);
+                boolean isFavorite = wordCursor.getInt(isFavoriteIndex) > 0;
+                Word word = new Word(id, text, translation, partOfSpeech, gender, number, isFavorite);
+                words.add(word);
+            } while (wordCursor.moveToNext());
+        } else {
+            Log.d("mylog", "NO ROWS IN TABLE " + TABLE_NAME);
+        }
+        wordCursor.close();
+        dbManager.close();
+        return words;
+    }
+
+    public ArrayList<Word> getWordsInDictionary(Dictionary dictionary) {
         dbManager.open();
         SQLiteDatabase db = dbManager.getDatabase();
         ArrayList<Word> words = new ArrayList<>();
@@ -96,62 +123,22 @@ public class DaoWord {
         }
         wordCursor.close();
         dbManager.close();
-        Log.d("mylog", "Words in dictionary " + dictionary.getName() + ": " + words);
         return words;
     }
 
-    public ArrayList<Word> getWords(Dictionary dictionary, Category category) {
-        dbManager.open();
-        SQLiteDatabase db = dbManager.getDatabase();
-        ArrayList<Word> words = new ArrayList<>();
-        String selection = "SELECT w." + FIELD_ID + ", w." + FIELD_TEXT + ", w." + FIELD_TRANSLATION + ", w." + FIELD_PART_OF_SPEECH + ", w." + FIELD_GENDER + ", w." + FIELD_NUMBER +
-                " FROM " + TABLE_NAME + " as w, " + DaoDictWord.LINK_TABLE_NAME + " as dw, " + DaoCatWord.LINK_TABLE_NAME + " as cw " +
-                " WHERE dw." + DaoDictWord.LINK_FIELD_ID_DICT + " = ? AND cw." + DaoCatWord.LINK_FIELD_ID_CAT +  " = ? " +
-                " AND w." + FIELD_ID + " = dw." + DaoDictWord.LINK_FIELD_ID_WORD + " AND w."+ FIELD_ID + " = cw." + DaoCatWord.LINK_FIELD_ID_WORD;
-        String[] selectionArgs = {String.valueOf(dictionary.getId()), String.valueOf(category.getId())};
-        Cursor wordCursor = db.rawQuery(selection, selectionArgs);
-        if(wordCursor.moveToFirst()) {
-            int idColIndex = wordCursor.getColumnIndex(FIELD_ID);
-            int textColIndex = wordCursor.getColumnIndex(FIELD_TEXT);
-            int translationColIndex = wordCursor.getColumnIndex(FIELD_TRANSLATION);
-            int partOfSpeechColIndex = wordCursor.getColumnIndex(FIELD_PART_OF_SPEECH);
-            int genderColIndex = wordCursor.getColumnIndex(FIELD_GENDER);
-            int numberColIndex = wordCursor.getColumnIndex(FIELD_NUMBER);
-            int isFavoriteIndex = wordCursor.getColumnIndex(FIELD_IS_FAVORITE);
-            do {
-                int id = wordCursor.getInt(idColIndex);
-                String text = wordCursor.getString(textColIndex);
-                String translation = wordCursor.getString(translationColIndex);
-                String partOfSpeech = wordCursor.getString(partOfSpeechColIndex);
-                String gender = wordCursor.getString(genderColIndex);
-                String number = wordCursor.getString(numberColIndex);
-                boolean isFavorite = wordCursor.getInt(isFavoriteIndex) > 0;
-                Word word = new Word(id, text, translation, partOfSpeech, gender, number, isFavorite);
-                words.add(word);
-            } while (wordCursor.moveToNext());
-        } else {
-            Log.d("mylog", "NO ROWS IN TABLE " + TABLE_NAME);
-        }
-        wordCursor.close();
-        dbManager.close();
-        Log.d("mylog", "Words in dictionary " + dictionary.getName() + ": " + words);
-        return words;
-    }
-
-    public int getWordsCountInDictionary(Dictionary dictionary) {
+    public int getWordsCountInCategory(Category category) {
         dbManager.open();
         SQLiteDatabase db = dbManager.getDatabase();
         ArrayList<Word> words = new ArrayList<>();
         String selection = "SELECT COUNT(w." + FIELD_ID + ") " +
-                " FROM " + TABLE_NAME + " as w, " + DaoDictWord.LINK_TABLE_NAME + " as dw " +
-                " WHERE dw." + DaoDictWord.LINK_FIELD_ID_DICT + " = ? AND w." + FIELD_ID + " = dw." + DaoDictWord.LINK_FIELD_ID_WORD;
-        String[] selectionArgs = {String.valueOf(dictionary.getId())};
+                " FROM " + TABLE_NAME + " as w, " + DaoCatWord.LINK_TABLE_NAME + " as dw " +
+                " WHERE dw." + DaoCatWord.LINK_FIELD_ID_CAT + " = ? AND w." + FIELD_ID + " = dw." + DaoCatWord.LINK_FIELD_ID_WORD;
+        String[] selectionArgs = {String.valueOf(category.getId())};
         Cursor wordCursor = db.rawQuery(selection, selectionArgs);
         wordCursor.moveToFirst();
         int wordCount = wordCursor.getInt(0);
         wordCursor.close();
         dbManager.close();
-        Log.d("mylog", "Words in dictionary " + dictionary.getName() + ": " + words);
         return wordCount;
     }
 
@@ -186,5 +173,25 @@ public class DaoWord {
         dbManager.close();
         Log.d("mylog", "All words: " + words);
         return words;
+    }
+
+    public int getNextId() {
+        dbManager.open();
+        SQLiteDatabase db = dbManager.getDatabase();
+        String selection =
+                "SELECT MAX(w." + FIELD_ID + ") " +
+                "FROM " + TABLE_NAME;
+        String[] selectionArgs = null;
+        Cursor wordCursor = db.rawQuery(selection, selectionArgs);
+        wordCursor.moveToFirst();
+        int maxId = wordCursor.getInt(0);
+        wordCursor.close();
+        dbManager.close();
+        return maxId + 1;
+    }
+
+    @Override
+    String getTableName() {
+        return TABLE_NAME;
     }
 }

@@ -13,9 +13,8 @@ import ua.madless.lingowl.model.Dictionary;
 /**
  * Created by madless on 02.01.2016.
  */
-public class DaoDictionary {
+public class DaoDictionary extends RealModelDao {
     private final static String TABLE_NAME = "dictionary";
-    private final static String FIELD_ID = "_ID";
     private final static String FIELD_NAME = "name";
     private final static String FIELD_CODE_TARGET_LANGUAGE = "code_target_language";
     private final static String FIELD_CODE_NATIVE_LANGUAGE = "code_native_language";
@@ -33,8 +32,6 @@ public class DaoDictionary {
                 FIELD_WORD_COUNTER  + " integer, " +
                 FIELD_DICT_TYPE + " integer " +
             " );";
-
-    DBManager dbManager;
 
     public DaoDictionary(DBManager dbManager) {
         this.dbManager = dbManager;
@@ -102,4 +99,8 @@ public class DaoDictionary {
         dbManager.close();
     }
 
+    @Override
+    String getTableName() {
+        return TABLE_NAME;
+    }
 }
