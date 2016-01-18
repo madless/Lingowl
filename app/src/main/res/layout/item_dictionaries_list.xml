@@ -17,7 +17,8 @@
         android:id="@+id/imageViewDictionaryItemIcon"
         android:src="@drawable/ic_flag_en"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp" />
+        android:layout_marginRight="10dp"
+        android:visibility="visible" />
 
     <TextView
         android:layout_width="wrap_content"

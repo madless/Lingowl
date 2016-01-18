@@ -1,4 +1,4 @@
-package ua.madless.lingowl.db.dao;
+package ua.madless.lingowl.db.dao.real;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -8,7 +8,9 @@ import android.util.Log;
 import java.util.ArrayList;
 
 import ua.madless.lingowl.db.DBManager;
-//import ua.madless.lingowl.db.dao.DaoDictWord;
+//import ua.madless.lingowl.db.dao.link.DaoDictWord;
+import ua.madless.lingowl.db.dao.link.DaoCatWord;
+import ua.madless.lingowl.db.dao.link.DaoDictWord;
 import ua.madless.lingowl.model.Category;
 import ua.madless.lingowl.model.Dictionary;
 import ua.madless.lingowl.model.Word;
@@ -49,7 +51,6 @@ public class DaoWord extends RealModelDao {
         wordRow.put(FIELD_NUMBER, word.getNumber());
         wordRow.put(FIELD_IS_FAVORITE, word.isFavorite() ? 1 : 0);
         db.insert(TABLE_NAME, null, wordRow);
-
         Log.d("mylog", "word inserted: " + word.toString());
         dbManager.close();
     }
@@ -58,7 +59,7 @@ public class DaoWord extends RealModelDao {
         dbManager.open();
         SQLiteDatabase db = dbManager.getDatabase();
         ArrayList<Word> words = new ArrayList<>();
-        String selection = "SELECT w." + FIELD_ID + ", w." + FIELD_TEXT + ", w." + FIELD_TRANSLATION + ", w." + FIELD_PART_OF_SPEECH + ", w." + FIELD_GENDER + ", w." + FIELD_NUMBER +
+        String selection = "SELECT w." + FIELD_ID + ", w." + FIELD_TEXT + ", w." + FIELD_TRANSLATION + ", w." + FIELD_PART_OF_SPEECH + ", w." + FIELD_GENDER + ", w." + FIELD_NUMBER + ", w." + FIELD_IS_FAVORITE +
                 " FROM " + TABLE_NAME + " as w, " + DaoCatWord.LINK_TABLE_NAME + " as dw " +
                 " WHERE dw." + DaoCatWord.LINK_FIELD_ID_CAT + " = ? AND w." + FIELD_ID + " = dw." + DaoCatWord.LINK_FIELD_ID_WORD;
         String[] selectionArgs = {String.valueOf(category.getId())};
@@ -87,6 +88,7 @@ public class DaoWord extends RealModelDao {
         }
         wordCursor.close();
         dbManager.close();
+        Log.d("mylog", "words in category: " + words);
         return words;
     }
 
@@ -123,6 +125,7 @@ public class DaoWord extends RealModelDao {
         }
         wordCursor.close();
         dbManager.close();
+        Log.d("mylog", "words in dictionary: " + words);
         return words;
     }
 
@@ -139,6 +142,7 @@ public class DaoWord extends RealModelDao {
         int wordCount = wordCursor.getInt(0);
         wordCursor.close();
         dbManager.close();
+        Log.d("mylog", "word count in category: " + wordCount);
         return wordCount;
     }
 
@@ -191,7 +195,7 @@ public class DaoWord extends RealModelDao {
     }
 
     @Override
-    String getTableName() {
+    public String getTableName() {
         return TABLE_NAME;
     }
 }

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -17,28 +18,35 @@ import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
+import java.util.ArrayList;
+
 import ua.madless.lingowl.R;
+import ua.madless.lingowl.constants.FragmentRequest;
 import ua.madless.lingowl.constants.Transfer;
+import ua.madless.lingowl.db.DbApi;
 import ua.madless.lingowl.manager.EventBusManager;
 import ua.madless.lingowl.model.Category;
 import ua.madless.lingowl.model.Dictionary;
 import ua.madless.lingowl.ui.fragment.CategoriesListFragment;
+import ua.madless.lingowl.ui.fragment.CreateCategoryFragment;
 import ua.madless.lingowl.ui.fragment.DictionariesListFragment;
 import ua.madless.lingowl.ui.fragment.WordsListFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Drawer.Result drawerResult = null;
+    private Drawer drawerResult = null;
     Dictionary selectedDictionary;
     Toolbar toolbar;
     FragmentManager fragmentManager;
     Bus bus;
+    DbApi dbApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +58,43 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager = getFragmentManager();
         // Инициализируем Toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.color_white));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Инициализируем Navigation Drawer
         prepareDrawer();
+        dbApi = DbApi.getInstance(this);
+
+//        ArrayList<Dictionary> dictionaries = getDefaultDictionaries();
+//        for(int i = 0; i < dictionaries.size(); i++) {
+//            dbApi.addDictionary(dictionaries.get(i));
+//        }
+//
+//        ArrayList<Category> categories = getDefaultCategories();
+//        for(int i = 0; i < categories.size(); i++) {
+//            dbApi.addCategory(dictionaries.get(i % 4), categories.get(i));
+//        }
+
+    }
+
+    private ArrayList<Dictionary> getDefaultDictionaries() {
+        ArrayList<Dictionary> dictionaries = new ArrayList<>();
+        dictionaries.add(new Dictionary("Английский", "en", "ru", 0, 1));
+        dictionaries.add(new Dictionary("Немецкий", "de", "ru", 1, 1));
+        dictionaries.add(new Dictionary("Французский", "fr", "ru", 2, 1));
+        dictionaries.add(new Dictionary("Испанский", "es", "ru", 4, 0));
+        return dictionaries;
+    }
+
+    private ArrayList<Category> getDefaultCategories() {
+        ArrayList<Category> categories = new ArrayList<>();
+        categories.add(new Category("Избранное", 0));
+        categories.add(new Category("Книги", 1));
+        categories.add(new Category("Семья", 2));
+        categories.add(new Category("Кино", 3));
+        categories.add(new Category("Технологии", 4));
+        categories.add(new Category("Путешествия", -1));
+        return categories;
     }
 
     @Override
@@ -98,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void prepareDrawer() {
-        drawerResult = new Drawer()
+        drawerResult = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .withActionBarDrawerToggle(true)
@@ -122,14 +163,18 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onDrawerClosed(View drawerView) {
                     }
+
+                    @Override
+                    public void onDrawerSlide(View drawerView, float slideOffset) {
+
+                    }
                 })
                 .withOnDrawerItemClickListener(new OnLingowlDrawerItemClickListener())
                 .withOnDrawerItemLongClickListener(new Drawer.OnDrawerItemLongClickListener() {
                     @Override
-                    // Обработка длинного клика, например, только для SecondaryDrawerItem
-                    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id, IDrawerItem drawerItem) {
+                    public boolean onItemLongClick(View view, int position, IDrawerItem drawerItem) {
                         if (drawerItem instanceof SecondaryDrawerItem) {
-                            Toast.makeText(MainActivity.this, MainActivity.this.getString(((SecondaryDrawerItem) drawerItem).getNameRes()), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, MainActivity.this.getString(((SecondaryDrawerItem) drawerItem).getName().getTextRes()), Toast.LENGTH_SHORT).show();
                         }
                         return false;
                     }
@@ -139,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
 
     class OnLingowlDrawerItemClickListener implements Drawer.OnDrawerItemClickListener {
         @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id, IDrawerItem drawerItem) {
+        public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
             Log.d("mylog", "Pos: " + position);
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             Fragment currentFragment = new FragmentStub();
@@ -182,6 +227,7 @@ public class MainActivity extends AppCompatActivity {
             fragmentTransaction.replace(R.id.content, currentFragment);
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
+            return false;
         }
     }
 
@@ -215,6 +261,31 @@ public class MainActivity extends AppCompatActivity {
         arguments.putParcelable(Transfer.SELECTED_CATEGORY.toString(), category);
         currentFragment.setArguments(arguments);
         toolbar.setTitle(category.getName());
+        fragmentTransaction.replace(R.id.content, currentFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    @Subscribe
+    public void onFragmentRequest(FragmentRequest request) {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Fragment currentFragment = null;
+        Bundle arguments = new Bundle();
+        switch (request) {
+            case ADD_DICTIONARY: {
+                break;
+            }
+            case ADD_CATEGORY: {
+                currentFragment = new CreateCategoryFragment();
+                arguments.putParcelable(Transfer.SELECTED_DICTIONARY.toString(), selectedDictionary);
+                toolbar.setTitle("Создание категории");
+                break;
+            }
+            case ADD_WORD: {
+                break;
+            }
+        }
+        currentFragment.setArguments(arguments);
         fragmentTransaction.replace(R.id.content, currentFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();

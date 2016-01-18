@@ -1,4 +1,4 @@
-package ua.madless.lingowl.db.dao;
+package ua.madless.lingowl.db.dao.real;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -8,6 +8,8 @@ import android.util.Log;
 import java.util.ArrayList;
 
 import ua.madless.lingowl.db.DBManager;
+import ua.madless.lingowl.db.dao.link.DaoCatWord;
+import ua.madless.lingowl.db.dao.link.DaoDictCat;
 import ua.madless.lingowl.model.Category;
 import ua.madless.lingowl.model.Dictionary;
 import ua.madless.lingowl.model.Word;
@@ -23,8 +25,8 @@ public class DaoCategory extends RealModelDao {
     public final static String QUERY_CREATE_TABLE = "CREATE TABLE " + TABLE_NAME +
             " ( " +
                 FIELD_ID + " integer primary key, " +
-                FIELD_NAME + " text " +
-                FIELD_ICON_ID + " integer " +
+                FIELD_NAME + " text, " +
+                FIELD_ICON_ID + " integer, " +
                 FIELD_WORD_COUNTER + " integer " +
             " );";
 
@@ -83,7 +85,7 @@ public class DaoCategory extends RealModelDao {
         dbManager.open();
         SQLiteDatabase db = dbManager.getDatabase();
         ArrayList<Category> categories = new ArrayList<>();
-        String selection = "SELECT c." + FIELD_ID + ", c." + FIELD_NAME +
+        String selection = "SELECT c." + FIELD_ID + ", c." + FIELD_NAME + ", c." + FIELD_ICON_ID + ", c." + FIELD_WORD_COUNTER +
                 " FROM " + TABLE_NAME + " as c, " + DaoDictCat.LINK_TABLE_NAME + " as dc " +
                 " WHERE dc." + DaoDictCat.LINK_FIELD_ID_DICT + " = ? AND c." + FIELD_ID + " = dc." + DaoDictCat.LINK_FIELD_ID_CAT;
         String[] selectionArgs = {String.valueOf(dictionary.getId())};
@@ -144,12 +146,12 @@ public class DaoCategory extends RealModelDao {
         String whereClause = FIELD_ID + " = ";
         String[] whereArgs = new String[]{String.valueOf(category.getId())};
         db.update(TABLE_NAME, dictionaryRow, whereClause, whereArgs);
-        Log.d("mylog", "dictionary incremented: " + category.toString());
+        Log.d("mylog", "category incremented: " + category.toString());
         dbManager.close();
     }
 
     @Override
-    String getTableName() {
+    public String getTableName() {
         return TABLE_NAME;
     }
 }

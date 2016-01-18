@@ -2,74 +2,25 @@
 <items version="2" >
 
     <item
-        jar="E:\workspace\Android\Lingowl\app\build\intermediates\exploded-aar\com.android.support\design\23.1.1\jars\classes.jar"
+        jar="E:\workspace\Android\Lingowl\app\build\intermediates\exploded-aar\com.mikepenz\materialize\0.5.1\jars\classes.jar"
         jumboMode="false"
         revision="23.0.2"
-        sha1="379471b2bd17d9737c050345c08e8c7d16589784">
-        <dex dex="E:\workspace\Android\Lingowl\app\build\intermediates\pre-dexed\debug\classes-66e7e65964e587ce0b3c58e00ba71d29c71f3430.jar" />
+        sha1="25e8af11fff99ad02250f52f2436e25f60cc1bbe">
+        <dex dex="E:\workspace\Android\Lingowl\app\build\intermediates\pre-dexed\debug\classes-eff88b30da43bed3ed4d5d9aa354f94c0ecf3a46.jar" />
     </item>
     <item
-        jar="E:\workspace\Android\Lingowl\app\build\intermediates\exploded-aar\com.mikepenz\iconics-core\2.5.3\jars\classes.jar"
+        jar="E:\workspace\Android\Lingowl\app\build\intermediates\exploded-aar\com.mikepenz\materialdrawer\4.6.4\jars\classes.jar"
         jumboMode="false"
         revision="23.0.2"
-        sha1="9ef5fb87bb1b632d7843294019eafb00ad443330">
-        <dex dex="E:\workspace\Android\Lingowl\app\build\intermediates\pre-dexed\debug\classes-d387688cdceed8ab3b23ccb0461b082e004e9a60.jar" />
+        sha1="25c8422fe5a0acee6cee4f7e52449c2802f6ca19">
+        <dex dex="E:\workspace\Android\Lingowl\app\build\intermediates\pre-dexed\debug\classes-38165bd1b2c8124636b1fa82b30d35d69f99b4fb.jar" />
     </item>
     <item
-        jar="C:\Users\User\.gradle\caches\modules-2\files-2.1\com.squareup\otto\1.3.8\cf615176cd1177edf71d3c9605f8dc148fede6be\otto-1.3.8.jar"
+        jar="E:\workspace\Android\Lingowl\app\build\intermediates\exploded-aar\com.mikepenz\iconics-core\2.5.4\jars\classes.jar"
         jumboMode="false"
         revision="23.0.2"
-        sha1="cf615176cd1177edf71d3c9605f8dc148fede6be">
-        <dex dex="E:\workspace\Android\Lingowl\app\build\intermediates\pre-dexed\debug\otto-1.3.8-0b403deaca8c863cfb51960c752fba0c8a335e61.jar" />
-    </item>
-    <item
-        jar="E:\workspace\Android\Lingowl\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.1.1\jars\classes.jar"
-        jumboMode="false"
-        revision="23.0.2"
-        sha1="5c5699834e9722f1c288fea2de82725d078ba127">
-        <dex dex="E:\workspace\Android\Lingowl\app\build\intermediates\pre-dexed\debug\classes-4d920d6ccf96c0ef1e2286ed331fdf1f46758b3d.jar" />
-    </item>
-    <item
-        jar="E:\workspace\Android\Lingowl\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.1.1\jars\libs\internal_impl-23.1.1.jar"
-        jumboMode="false"
-        revision="23.0.2"
-        sha1="a4de9c81ae239414e1ed0f86441b02abaf29bca9">
-        <dex dex="E:\workspace\Android\Lingowl\app\build\intermediates\pre-dexed\debug\internal_impl-23.1.1-c9cc8b0212b579cb61ecfec1e2acb04a305db2a8.jar" />
-    </item>
-    <item
-        jar="E:\workspace\Android\Lingowl\app\build\intermediates\exploded-aar\com.mikepenz.materialdrawer\library\0.9.5\jars\classes.jar"
-        jumboMode="false"
-        revision="23.0.2"
-        sha1="196889103665d7eae17105a5a78f141086044301">
-        <dex dex="E:\workspace\Android\Lingowl\app\build\intermediates\pre-dexed\debug\classes-b6930d2cb70da5eae0e5304e93818cb7c4851c09.jar" />
-    </item>
-    <item
-        jar="E:\workspace\Android\Lingowl\app\build\intermediates\exploded-aar\com.getbase\floatingactionbutton\1.10.1\jars\classes.jar"
-        jumboMode="false"
-        revision="23.0.2"
-        sha1="f40cf334cdc8b098b74312e21c7741c6eefbeb0e">
-        <dex dex="E:\workspace\Android\Lingowl\app\build\intermediates\pre-dexed\debug\classes-935b4db72449142828838a522b668e81fe96d91f.jar" />
-    </item>
-    <item
-        jar="E:\programs\AndroidSDK\extras\android\m2repository\com\android\support\support-annotations\23.1.1\support-annotations-23.1.1.jar"
-        jumboMode="false"
-        revision="23.0.2"
-        sha1="8d680ba5a623724d1fb0e81c36a790f023a6cede">
-        <dex dex="E:\workspace\Android\Lingowl\app\build\intermediates\pre-dexed\debug\support-annotations-23.1.1-3056fe8f762a0499f2d99599c83db29c3c6bdef9.jar" />
-    </item>
-    <item
-        jar="E:\workspace\Android\Lingowl\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\23.1.1\jars\classes.jar"
-        jumboMode="false"
-        revision="23.0.2"
-        sha1="09c5e804bc67fc0580360043dff067df574a60d4">
-        <dex dex="E:\workspace\Android\Lingowl\app\build\intermediates\pre-dexed\debug\classes-9cb6bfe6b6ce7dbae28a92157ff8387693e5e797.jar" />
-    </item>
-    <item
-        jar="E:\workspace\Android\Lingowl\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.1.1\jars\classes.jar"
-        jumboMode="false"
-        revision="23.0.2"
-        sha1="6cbc7773921fcfedbe55657578f0cbfe614778dc">
-        <dex dex="E:\workspace\Android\Lingowl\app\build\intermediates\pre-dexed\debug\classes-e5ac9029b79ebdb9fd0c21b29d9afd97edb310b7.jar" />
+        sha1="dcacf665e5536c0da76732c56bae2ae1e202d5da">
+        <dex dex="E:\workspace\Android\Lingowl\app\build\intermediates\pre-dexed\debug\classes-516a753e8934292e274391948a17f70b96dd4a0c.jar" />
     </item>
 
 </items>

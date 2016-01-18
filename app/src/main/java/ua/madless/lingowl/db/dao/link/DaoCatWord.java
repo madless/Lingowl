@@ -1,10 +1,11 @@
-package ua.madless.lingowl.db.dao;
+package ua.madless.lingowl.db.dao.link;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import ua.madless.lingowl.db.DBManager;
+import ua.madless.lingowl.db.dao.BaseDao;
 import ua.madless.lingowl.model.Category;
 import ua.madless.lingowl.model.Word;
 
@@ -37,7 +38,7 @@ public class DaoCatWord extends BaseDao {
     }
 
     @Override
-    String getTableName() {
+    public String getTableName() {
         return LINK_TABLE_NAME;
     }
 }

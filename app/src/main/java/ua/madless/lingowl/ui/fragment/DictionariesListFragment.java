@@ -34,7 +34,7 @@ public class DictionariesListFragment extends BaseListFragment {
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
         recyclerViewDictionariesList.setLayoutManager(layoutManager);
         recyclerViewDictionariesList.setItemAnimator(itemAnimator);
-        dictionaries = getDefaultDictionaries();
+        dictionaries = dbApi.getAllDictionaries();
         DictionariesListAdapter dictionariesListAdapter = new DictionariesListAdapter(getActivity(), dictionaries);
         recyclerViewDictionariesList.setAdapter(dictionariesListAdapter);
         recyclerViewDictionariesList.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), recyclerViewDictionariesList, this));
@@ -44,14 +44,14 @@ public class DictionariesListFragment extends BaseListFragment {
         return root;
     }
 
-    private ArrayList<Dictionary> getDefaultDictionaries() {
-        ArrayList<Dictionary> dictionaries = new ArrayList<>();
-        dictionaries.add(new Dictionary(0, "Английский", "en", "ru", 0, 34, 1));
-        dictionaries.add(new Dictionary(1, "Немецкий", "de", "ru", 1, 32, 1));
-        dictionaries.add(new Dictionary(2, "Французский", "fr", "ru", 2, 12, 1));
-        dictionaries.add(new Dictionary(3, "Испанский", "es", "ru", 4, 0, 1));
-        return dictionaries;
-    }
+//    private ArrayList<Dictionary> getDefaultDictionaries() {
+//        ArrayList<Dictionary> dictionaries = new ArrayList<>();
+//        dictionaries.add(new Dictionary(0, "Английский", "en", "ru", 0, 34, 1));
+//        dictionaries.add(new Dictionary(1, "Немецкий", "de", "ru", 1, 32, 1));
+//        dictionaries.add(new Dictionary(2, "Французский", "fr", "ru", 2, 12, 1));
+//        dictionaries.add(new Dictionary(3, "Испанский", "es", "ru", 4, 0, 1));
+//        return dictionaries;
+//    }
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {

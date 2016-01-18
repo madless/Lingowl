@@ -1,7 +1,9 @@
-package ua.madless.lingowl.db.dao;
+package ua.madless.lingowl.db.dao.real;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import ua.madless.lingowl.db.dao.BaseDao;
 
 /**
  * Created by User on 18.01.2016.
@@ -13,7 +15,7 @@ public abstract class RealModelDao extends BaseDao {
         dbManager.open();
         SQLiteDatabase db = dbManager.getDatabase();
         String selection =
-                "SELECT MAX(w." + getIdName() + ") " +
+                "SELECT MAX(" + getIdName() + ") " +
                         "FROM " + getTableName();
         String[] selectionArgs = null;
         Cursor wordCursor = db.rawQuery(selection, selectionArgs);
@@ -24,7 +26,7 @@ public abstract class RealModelDao extends BaseDao {
         return maxId + 1;
     }
 
-    String getIdName() {
+    public String getIdName() {
         return FIELD_ID;
     }
 }

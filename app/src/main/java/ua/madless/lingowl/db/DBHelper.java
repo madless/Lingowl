@@ -16,23 +16,23 @@ import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.sql.SQLException;
 
-import ua.madless.lingowl.db.dao.DaoCategory;
-import ua.madless.lingowl.db.dao.DaoDictCat;
-import ua.madless.lingowl.db.dao.DaoDictWord;
-import ua.madless.lingowl.db.dao.DaoDictionary;
-import ua.madless.lingowl.db.dao.DaoWord;
-import ua.madless.lingowl.db.dao.DaoCatWord;
+import ua.madless.lingowl.db.dao.real.DaoCategory;
+import ua.madless.lingowl.db.dao.link.DaoDictCat;
+import ua.madless.lingowl.db.dao.link.DaoDictWord;
+import ua.madless.lingowl.db.dao.real.DaoDictionary;
+import ua.madless.lingowl.db.dao.real.DaoWord;
+import ua.madless.lingowl.db.dao.link.DaoCatWord;
 
 public class DBHelper extends SQLiteOpenHelper {
     private Context context;
     private SQLiteDatabase database;
     private String dbPath;
-    private final static String DB_DEBUG_NAME = "lingowl_debug0.sqlite";
+    private final static String DB_DEBUG_NAME = "lingowl_debug_7.sqlite";
     private final static String DB_RELEASE_NAME = "lingowl.sqlite";
     private final static String DB_NAME = DB_DEBUG_NAME;
 
 
-    private final static int DB_VERSION = 1;
+    private final static int DB_VERSION = 7;
 
     public DBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -63,8 +63,9 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     private boolean isDatabaseExist() {
-        File dbFile = new File(dbPath + DB_NAME);
-        return dbFile.exists();
+//        File dbFile = new File(dbPath + DB_NAME);
+//        return dbFile.exists();
+        return false;
     }
 
     private void copyDBFromExternal() throws IOException {

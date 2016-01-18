@@ -19,10 +19,10 @@ public class Category implements Parcelable {
         this.wordCounter = wordCounter;
     }
 
-    public Category(String name, int iconId, int wordCounter) {
+    public Category(String name, int iconId) {
         this.name = name;
         this.iconId = iconId;
-        this.wordCounter = wordCounter;
+        this.wordCounter = 0;
         this.id = -1;
     }
 
@@ -84,5 +84,15 @@ public class Category implements Parcelable {
         dest.writeString(name);
         dest.writeInt(iconId);
         dest.writeInt(wordCounter);
+    }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", iconId=" + iconId +
+                ", wordCounter=" + wordCounter +
+                '}';
     }
 }

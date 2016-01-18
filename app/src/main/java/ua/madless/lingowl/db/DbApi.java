@@ -1,13 +1,15 @@
 package ua.madless.lingowl.db;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 
-import ua.madless.lingowl.db.dao.DaoCatWord;
-import ua.madless.lingowl.db.dao.DaoCategory;
-import ua.madless.lingowl.db.dao.DaoDictCat;
-import ua.madless.lingowl.db.dao.DaoDictWord;
-import ua.madless.lingowl.db.dao.DaoDictionary;
-import ua.madless.lingowl.db.dao.DaoWord;
+import ua.madless.lingowl.db.dao.link.DaoCatWord;
+import ua.madless.lingowl.db.dao.real.DaoCategory;
+import ua.madless.lingowl.db.dao.link.DaoDictCat;
+import ua.madless.lingowl.db.dao.link.DaoDictWord;
+import ua.madless.lingowl.db.dao.real.DaoDictionary;
+import ua.madless.lingowl.db.dao.real.DaoWord;
 import ua.madless.lingowl.model.Category;
 import ua.madless.lingowl.model.Dictionary;
 import ua.madless.lingowl.model.Word;
@@ -24,8 +26,17 @@ public class DbApi {
     DaoDictCat daoDictCat;
     DaoDictWord daoDictWord;
 
-    public DbApi(DBManager dbManager) {
-        this.dbManager = dbManager;
+    private static DbApi instance;
+
+    public static DbApi getInstance(Context context) {
+        if(instance == null) {
+            instance = new DbApi(context);
+        }
+        return instance;
+    }
+
+    private DbApi(Context context) {
+        this.dbManager = new DBManager(context);
         daoDictionary = new DaoDictionary(dbManager);
         daoCategory = new DaoCategory(dbManager);
         daoWord = new DaoWord(dbManager);

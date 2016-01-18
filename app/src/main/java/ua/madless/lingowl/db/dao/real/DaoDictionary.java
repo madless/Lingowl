@@ -1,4 +1,4 @@
-package ua.madless.lingowl.db.dao;
+package ua.madless.lingowl.db.dao.real;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -100,7 +100,7 @@ public class DaoDictionary extends RealModelDao {
     }
 
     @Override
-    String getTableName() {
+    public String getTableName() {
         return TABLE_NAME;
     }
 }

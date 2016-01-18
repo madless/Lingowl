@@ -13,4 +13,6 @@ public class EventBusManager {
         }
         return bus;
     }
+    private EventBusManager() {
+    }
 }
