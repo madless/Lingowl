@@ -40,18 +40,18 @@
             android:text="Результат:"
             android:textColor="@color/color_black"
             android:id="@+id/textView"
-            android:layout_toLeftOf="@+id/imageView4"
+            android:layout_toLeftOf="@+id/imageViewCreateWordModeSwitch"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_marginLeft="10dp"
-            android:layout_alignBottom="@+id/imageView4"
+            android:layout_alignBottom="@+id/imageViewCreateWordModeSwitch"
             android:layout_alignParentTop="true"
             android:gravity="center_vertical" />
 
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:id="@+id/imageView4"
+            android:id="@+id/imageViewCreateWordModeSwitch"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
@@ -59,7 +59,34 @@
             android:layout_marginRight="10dp" />
     </RelativeLayout>
 
-    <include layout="@layout/footer_standard_translation" />
+    <include
+        layout="@layout/footer_standard_translation"
+        android:id="@+id/viewCreateWordMutableContainer"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinnerCreateWordCategories"
+            android:layout_gravity="center_horizontal"
+            android:visibility="visible"
+            android:layout_toStartOf="@+id/imageViewCreateWordAddCategory"
+            android:layout_toLeftOf="@+id/imageViewCreateWordAddCategory"
+            android:layout_alignBottom="@+id/imageViewCreateWordAddCategory" />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/imageViewCreateWordAddCategory"
+            android:src="@mipmap/ic_add_category"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
 
     <TextView
         android:layout_width="wrap_content"
@@ -67,11 +94,12 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Примечание:"
         android:layout_marginLeft="10dp"
-        android:textColor="@color/color_gray" />
+        android:textColor="@color/color_gray"
+        android:layout_marginTop="10dp" />
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="200dp"
         android:id="@+id/editTextCreateWordComment"
         android:textColor="@color/color_black"
         android:textColorHint="@color/color_gray"
