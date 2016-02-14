@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 import ua.madless.lingowl.R;
 import ua.madless.lingowl.manager.IconManager;
-import ua.madless.lingowl.model.Dictionary;
+import ua.madless.lingowl.model.db_model.Dictionary;
 
 public class DictionariesListAdapter extends RecyclerView.Adapter<DictionariesListAdapter.ViewHolder> {
     ArrayList<Dictionary> dictionaries;

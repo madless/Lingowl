@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 import ua.madless.lingowl.R;
 import ua.madless.lingowl.manager.IconManager;
-import ua.madless.lingowl.model.Category;
+import ua.madless.lingowl.model.db_model.Category;
 
 public class CategoriesListAdapter extends RecyclerView.Adapter<CategoriesListAdapter.ViewHolder> {
     ArrayList<Category> categories;

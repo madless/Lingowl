@@ -2,13 +2,11 @@ package ua.madless.lingowl.db.dao.link;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import ua.madless.lingowl.db.DBManager;
 import ua.madless.lingowl.db.dao.BaseDao;
-import ua.madless.lingowl.model.Category;
-import ua.madless.lingowl.model.Dictionary;
-import ua.madless.lingowl.model.Word;
+import ua.madless.lingowl.model.db_model.Dictionary;
+import ua.madless.lingowl.model.db_model.Word;
 
 /**
  * Created by madless on 02.01.2016.

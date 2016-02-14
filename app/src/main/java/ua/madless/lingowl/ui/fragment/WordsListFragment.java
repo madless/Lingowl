@@ -2,6 +2,7 @@ package ua.madless.lingowl.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,20 +10,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.squareup.otto.Bus;
+
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import ua.madless.lingowl.R;
 import ua.madless.lingowl.adapter.WordsListAdapter;
-import ua.madless.lingowl.model.Word;
+import ua.madless.lingowl.constants.FragmentRequest;
+import ua.madless.lingowl.manager.EventBusManager;
+import ua.madless.lingowl.model.db_model.Word;
 
-public class WordsListFragment extends BaseListFragment {
-    RecyclerView recyclerViewWordsList;
+public class WordsListFragment extends BaseListFragment implements View.OnClickListener {
+    @Bind(R.id.recyclerViewWordsList) RecyclerView recyclerViewWordsList;
+    @Bind(R.id.buttonAddWord) FloatingActionButton buttonAddCategory;
     ArrayList<Word> words;
+    Bus eventBus;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_words_list, null);
-        recyclerViewWordsList = (RecyclerView) root.findViewById(R.id.recyclerViewWordsList);
+        ButterKnife.bind(this, root);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
@@ -31,6 +41,8 @@ public class WordsListFragment extends BaseListFragment {
         recyclerViewWordsList.setItemAnimator(itemAnimator);
         words = getWords();
         WordsListAdapter wordsListAdapter = new WordsListAdapter(getActivity(), words);
+
+        eventBus = EventBusManager.getBus();
 
         recyclerViewWordsList.setAdapter(wordsListAdapter);
         setHasOptionsMenu(true);
@@ -74,6 +86,17 @@ public class WordsListFragment extends BaseListFragment {
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
-
     }
+
+    @OnClick(R.id.buttonAddWord)
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.buttonAddWord: {
+                eventBus.post(FragmentRequest.ADD_WORD);
+                break;
+            }
+        }
+    }
+
 }

@@ -11,9 +11,9 @@ import ua.madless.lingowl.db.DBManager;
 //import ua.madless.lingowl.db.dao.link.DaoDictWord;
 import ua.madless.lingowl.db.dao.link.DaoCatWord;
 import ua.madless.lingowl.db.dao.link.DaoDictWord;
-import ua.madless.lingowl.model.Category;
-import ua.madless.lingowl.model.Dictionary;
-import ua.madless.lingowl.model.Word;
+import ua.madless.lingowl.model.db_model.Category;
+import ua.madless.lingowl.model.db_model.Dictionary;
+import ua.madless.lingowl.model.db_model.Word;
 
 public class DaoWord extends RealModelDao {
     public final static String TABLE_NAME = "words";

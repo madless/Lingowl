@@ -1,4 +1,4 @@
-package ua.madless.lingowl.model;
+package ua.madless.lingowl.model.db_model;
 
 /**
  * Created by madless on 02.01.2016.

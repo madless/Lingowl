@@ -3,6 +3,7 @@ package ua.madless.lingowl.model;
 /**
  * Created by madless on 03.01.2016.
  */
+@Deprecated
 public class YandexDictionaryResponse {
     String responseStr;
 

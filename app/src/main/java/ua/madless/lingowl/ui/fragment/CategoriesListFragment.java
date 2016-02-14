@@ -20,8 +20,8 @@ import ua.madless.lingowl.constants.FragmentRequest;
 import ua.madless.lingowl.constants.Transfer;
 import ua.madless.lingowl.listener.RecyclerItemClickListener;
 import ua.madless.lingowl.manager.EventBusManager;
-import ua.madless.lingowl.model.Category;
-import ua.madless.lingowl.model.Dictionary;
+import ua.madless.lingowl.model.db_model.Category;
+import ua.madless.lingowl.model.db_model.Dictionary;
 
 public class CategoriesListFragment extends BaseListFragment {
     Bus eventBus;

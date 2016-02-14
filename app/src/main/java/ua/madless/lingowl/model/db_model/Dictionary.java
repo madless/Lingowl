@@ -1,4 +1,4 @@
-package ua.madless.lingowl.model;
+package ua.madless.lingowl.model.db_model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

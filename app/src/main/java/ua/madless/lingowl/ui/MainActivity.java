@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.mikepenz.materialdrawer.Drawer;
@@ -31,11 +29,13 @@ import ua.madless.lingowl.R;
 import ua.madless.lingowl.constants.FragmentRequest;
 import ua.madless.lingowl.constants.Transfer;
 import ua.madless.lingowl.db.DbApi;
+import ua.madless.lingowl.manager.Container;
 import ua.madless.lingowl.manager.EventBusManager;
-import ua.madless.lingowl.model.Category;
-import ua.madless.lingowl.model.Dictionary;
+import ua.madless.lingowl.model.db_model.Category;
+import ua.madless.lingowl.model.db_model.Dictionary;
 import ua.madless.lingowl.ui.fragment.CategoriesListFragment;
 import ua.madless.lingowl.ui.fragment.CreateCategoryFragment;
+import ua.madless.lingowl.ui.fragment.CreateWordFragment;
 import ua.madless.lingowl.ui.fragment.DictionariesListFragment;
 import ua.madless.lingowl.ui.fragment.WordsListFragment;
 
@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     FragmentManager fragmentManager;
     Bus bus;
     DbApi dbApi;
+    Container container;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         bus = EventBusManager.getBus();
         Log.d("mylog", "bus in activity: " + bus.hashCode());
 
+        container = Container.getInstance();
         fragmentManager = getFragmentManager();
         // Инициализируем Toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -63,7 +66,8 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Инициализируем Navigation Drawer
         prepareDrawer();
-        dbApi = DbApi.getInstance(this);
+        container.getSettings().setNativeLanguage("ru"); // TODO: 14.02.2016 User must choose native language by himself 
+        //dbApi = DbApi.getInstance(this);
 
 //        ArrayList<Dictionary> dictionaries = getDefaultDictionaries();
 //        for(int i = 0; i < dictionaries.size(); i++) {
@@ -247,6 +251,7 @@ public class MainActivity extends AppCompatActivity {
         arguments.putParcelable(Transfer.SELECTED_DICTIONARY.toString(), selectedDictionary);
         currentFragment.setArguments(arguments);
         toolbar.setTitle("Категории (" + selectedDictionary.getCodeTargetLanguage() + ")");
+        container.getSettings().setTargetLanguage(selectedDictionary.getCodeTargetLanguage());
         fragmentTransaction.replace(R.id.content, currentFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
@@ -282,6 +287,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }
             case ADD_WORD: {
+                currentFragment = new CreateWordFragment();
+                toolbar.setTitle("Добавить новое слово");
                 break;
             }
         }
@@ -290,4 +297,16 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
+//    @Subscribe
+//    public void onWordAdd(FragmentEventType fragmentEventType) {
+//        Log.d("mylog_ui", "onWordAdd");
+//        switch (fragmentEventType) {
+//            case ADD_WORD: {
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                Fragment currentFragment = new CreateWordFragment();
+//                break;
+//            }
+//        }
+//    }
 }
