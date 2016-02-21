@@ -5,6 +5,7 @@ import android.content.Context;
 import ua.madless.lingowl.db.DbApi;
 import ua.madless.lingowl.holder.SettingsHolder;
 import ua.madless.lingowl.net.QueryManager;
+import ua.madless.lingowl.util.ServerResponseConverter;
 
 /**
  * Created by User on 14.02.2016.

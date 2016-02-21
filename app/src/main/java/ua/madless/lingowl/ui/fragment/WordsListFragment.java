@@ -18,7 +18,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ua.madless.lingowl.R;
-import ua.madless.lingowl.adapter.WordsListAdapter;
+import ua.madless.lingowl.ui.adapter.WordsListAdapter;
 import ua.madless.lingowl.constants.FragmentRequest;
 import ua.madless.lingowl.manager.EventBusManager;
 import ua.madless.lingowl.model.db_model.Word;

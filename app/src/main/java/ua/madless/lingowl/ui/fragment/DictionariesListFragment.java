@@ -15,7 +15,7 @@ import com.squareup.otto.Bus;
 import java.util.ArrayList;
 
 import ua.madless.lingowl.R;
-import ua.madless.lingowl.adapter.DictionariesListAdapter;
+import ua.madless.lingowl.ui.adapter.DictionariesListAdapter;
 import ua.madless.lingowl.listener.RecyclerItemClickListener;
 import ua.madless.lingowl.manager.EventBusManager;
 import ua.madless.lingowl.model.db_model.Dictionary;
@@ -43,15 +43,6 @@ public class DictionariesListFragment extends BaseListFragment {
         Log.d("mylog", "bus in fragment: " + eventBus.hashCode());
         return root;
     }
-
-//    private ArrayList<Dictionary> getDefaultDictionaries() {
-//        ArrayList<Dictionary> dictionaries = new ArrayList<>();
-//        dictionaries.add(new Dictionary(0, "Английский", "en", "ru", 0, 34, 1));
-//        dictionaries.add(new Dictionary(1, "Немецкий", "de", "ru", 1, 32, 1));
-//        dictionaries.add(new Dictionary(2, "Французский", "fr", "ru", 2, 12, 1));
-//        dictionaries.add(new Dictionary(3, "Испанский", "es", "ru", 4, 0, 1));
-//        return dictionaries;
-//    }
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {

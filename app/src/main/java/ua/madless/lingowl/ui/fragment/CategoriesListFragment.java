@@ -15,7 +15,7 @@ import com.squareup.otto.Bus;
 import java.util.ArrayList;
 
 import ua.madless.lingowl.R;
-import ua.madless.lingowl.adapter.CategoriesListAdapter;
+import ua.madless.lingowl.ui.adapter.CategoriesListAdapter;
 import ua.madless.lingowl.constants.FragmentRequest;
 import ua.madless.lingowl.constants.Transfer;
 import ua.madless.lingowl.listener.RecyclerItemClickListener;

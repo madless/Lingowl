@@ -1,4 +1,4 @@
-package ua.madless.lingowl.adapter;
+package ua.madless.lingowl.ui.adapter;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;

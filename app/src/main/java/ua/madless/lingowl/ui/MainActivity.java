@@ -9,8 +9,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
@@ -127,20 +125,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Заглушка, работа с меню
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    // Заглушка, работа с меню
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        Log.d("mylog", "ID: " + id);
-        return super.onOptionsItemSelected(item);
-    }
+//    // Заглушка, работа с меню
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.main, menu);
+//        return true;
+//    }
+//
+//    // Заглушка, работа с меню
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int id = item.getItemId();
+//        Log.d("mylog", "ID: " + id);
+//        return super.onOptionsItemSelected(item);
+//    }
 
     public void prepareDrawer() {
         drawerResult = new DrawerBuilder()
@@ -304,7 +302,7 @@ public class MainActivity extends AppCompatActivity {
 //        switch (fragmentEventType) {
 //            case ADD_WORD: {
 //                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                Fragment currentFragment = new CreateWordFragment();
+//                Fragment currentFragment = new CreateWordFragmentOld();
 //                break;
 //            }
 //        }

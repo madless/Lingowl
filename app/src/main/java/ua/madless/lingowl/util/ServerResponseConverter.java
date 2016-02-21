@@ -1,9 +1,10 @@
-package ua.madless.lingowl.manager;
+package ua.madless.lingowl.util;
 
 import android.util.Log;
 
 import java.util.ArrayList;
 
+import ua.madless.lingowl.model.converted_server_response.ConvertedResponseAdapterItem;
 import ua.madless.lingowl.model.converted_server_response.ConvertedResponseItem;
 import ua.madless.lingowl.model.server_response.Article;
 import ua.madless.lingowl.model.server_response.ServerResponse;
@@ -50,6 +51,15 @@ public class ServerResponseConverter {
         Log.d("mylog", "WORD: " + text);
         Log.d("mylog", "TRANSLATIONS:" + convertedResponseItems);
         return convertedResponseItems;
+    }
+
+    public ArrayList<ConvertedResponseAdapterItem> convertedResponseToAdapterItems(ServerResponse serverResponse){
+        ArrayList<ConvertedResponseItem> convertedResponseItems = convertServerResponse(serverResponse);
+        ArrayList<ConvertedResponseAdapterItem> convertedResponseAdapterItems = new ArrayList<>(convertedResponseItems.size());
+        for(ConvertedResponseItem convertedResponseItem: convertedResponseItems) {
+            convertedResponseAdapterItems.add(new ConvertedResponseAdapterItem(convertedResponseItem));
+        }
+        return convertedResponseAdapterItems;
     }
 
 }

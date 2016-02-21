@@ -8,7 +8,7 @@ import android.util.Log;
 import java.util.ArrayList;
 
 import ua.madless.lingowl.R;
-import ua.madless.lingowl.adapter.DictionariesListAdapter;
+import ua.madless.lingowl.ui.adapter.DictionariesListAdapter;
 import ua.madless.lingowl.model.db_model.Dictionary;
 
 public class TestActivity extends AppCompatActivity {
