@@ -16,19 +16,19 @@ import java.util.ArrayList;
 
 import ua.madless.lingowl.R;
 import ua.madless.lingowl.ui.adapter.CategoriesListAdapter;
-import ua.madless.lingowl.constants.FragmentRequest;
-import ua.madless.lingowl.constants.Transfer;
-import ua.madless.lingowl.listener.RecyclerItemClickListener;
-import ua.madless.lingowl.manager.EventBusManager;
-import ua.madless.lingowl.model.db_model.Category;
-import ua.madless.lingowl.model.db_model.Dictionary;
+import ua.madless.lingowl.core.constants.FragmentRequest;
+import ua.madless.lingowl.core.constants.Transfer;
+import ua.madless.lingowl.core.listener.RecyclerItemClickListener;
+import ua.madless.lingowl.core.manager.EventBusManager;
+import ua.madless.lingowl.core.model.db_model.Category;
+import ua.madless.lingowl.core.model.db_model.Dictionary;
 
 public class CategoriesListFragment extends BaseListFragment {
-    Bus eventBus;
-    RecyclerView recyclerViewCategoriesList;
-    FloatingActionButton buttonAddCategory;
-    ArrayList<Category> categories;
-    Dictionary selectedDictionary;
+    private Bus eventBus;
+    private RecyclerView recyclerViewCategoriesList;
+    private FloatingActionButton buttonAddCategory;
+    private ArrayList<Category> categories;
+    private Dictionary selectedDictionary;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

@@ -10,9 +10,9 @@ import ua.madless.lingowl.db.dao.link.DaoDictWord;
 import ua.madless.lingowl.db.dao.real.DaoCategory;
 import ua.madless.lingowl.db.dao.real.DaoDictionary;
 import ua.madless.lingowl.db.dao.real.DaoWord;
-import ua.madless.lingowl.model.db_model.Category;
-import ua.madless.lingowl.model.db_model.Dictionary;
-import ua.madless.lingowl.model.db_model.Word;
+import ua.madless.lingowl.core.model.db_model.Category;
+import ua.madless.lingowl.core.model.db_model.Dictionary;
+import ua.madless.lingowl.core.model.db_model.Word;
 
 /**
  * Created by madless on 07.01.2016.

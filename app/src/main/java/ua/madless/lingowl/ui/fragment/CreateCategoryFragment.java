@@ -16,14 +16,15 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import ua.madless.lingowl.R;
-import ua.madless.lingowl.constants.Transfer;
+import ua.madless.lingowl.core.constants.Transfer;
 import ua.madless.lingowl.db.DbApi;
-import ua.madless.lingowl.model.db_model.Category;
-import ua.madless.lingowl.model.db_model.Dictionary;
+import ua.madless.lingowl.core.model.db_model.Category;
+import ua.madless.lingowl.core.model.db_model.Dictionary;
 
 /**
  * Created by User on 18.01.2016.
  */
+@Deprecated
 public class CreateCategoryFragment extends Fragment implements View.OnClickListener {
     DbApi dbApi;
     Button buttonCreateCategoryCancel;

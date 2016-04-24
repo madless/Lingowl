@@ -5,8 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import ua.madless.lingowl.db.DBManager;
 import ua.madless.lingowl.db.dao.BaseDao;
-import ua.madless.lingowl.model.db_model.Category;
-import ua.madless.lingowl.model.db_model.Word;
+import ua.madless.lingowl.core.model.db_model.Category;
+import ua.madless.lingowl.core.model.db_model.Word;
 
 /**
  * Created by madless on 02.01.2016.

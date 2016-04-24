@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import ua.madless.lingowl.db.DBManager;
 import ua.madless.lingowl.db.dao.link.DaoCatWord;
 import ua.madless.lingowl.db.dao.link.DaoDictCat;
-import ua.madless.lingowl.model.db_model.Category;
-import ua.madless.lingowl.model.db_model.Dictionary;
-import ua.madless.lingowl.model.db_model.Word;
+import ua.madless.lingowl.core.model.db_model.Category;
+import ua.madless.lingowl.core.model.db_model.Dictionary;
+import ua.madless.lingowl.core.model.db_model.Word;
 
 /**
  * Created by madless on 02.01.2016.

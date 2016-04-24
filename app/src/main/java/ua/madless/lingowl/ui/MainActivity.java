@@ -1,45 +1,47 @@
 package ua.madless.lingowl.ui;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
+import android.os.PersistableBundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
+import android.view.MenuItem;
 
-import com.mikepenz.materialdrawer.Drawer;
-import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
-import java.util.ArrayList;
-
 import ua.madless.lingowl.R;
-import ua.madless.lingowl.constants.FragmentRequest;
-import ua.madless.lingowl.constants.Transfer;
+import ua.madless.lingowl.core.constants.FragmentRequest;
+import ua.madless.lingowl.core.constants.Transfer;
 import ua.madless.lingowl.db.DbApi;
-import ua.madless.lingowl.manager.Container;
-import ua.madless.lingowl.manager.EventBusManager;
-import ua.madless.lingowl.model.db_model.Category;
-import ua.madless.lingowl.model.db_model.Dictionary;
+import ua.madless.lingowl.core.manager.Container;
+import ua.madless.lingowl.core.manager.EventBusManager;
+import ua.madless.lingowl.core.model.db_model.Category;
+import ua.madless.lingowl.core.model.db_model.Dictionary;
+import ua.madless.lingowl.ui.dialog.PickCategoryDialogFragment;
 import ua.madless.lingowl.ui.fragment.CategoriesListFragment;
-import ua.madless.lingowl.ui.fragment.CreateCategoryFragment;
 import ua.madless.lingowl.ui.fragment.CreateWordFragment;
 import ua.madless.lingowl.ui.fragment.DictionariesListFragment;
 import ua.madless.lingowl.ui.fragment.WordsListFragment;
 
-public class MainActivity extends AppCompatActivity {
+//import com.mikepenz.materialdrawer.Drawer;
+//import com.mikepenz.materialdrawer.DrawerBuilder;
+//import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+//import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+//import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
-    private Drawer drawerResult = null;
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    //private Drawer drawerResult = null;
     Dictionary selectedDictionary;
     Toolbar toolbar;
     FragmentManager fragmentManager;
@@ -47,6 +49,10 @@ public class MainActivity extends AppCompatActivity {
     DbApi dbApi;
     Container container;
 
+    private NavigationView mDrawer;
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle drawerToggle;
+    private int mSelectedId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,13 +64,25 @@ public class MainActivity extends AppCompatActivity {
         container = Container.getInstance();
         fragmentManager = getFragmentManager();
         // Инициализируем Toolbar
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.color_white));
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.color_white));
+//        setSupportActionBar(toolbar);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Инициализируем Navigation Drawer
-        prepareDrawer();
+        //prepareDrawer();
         container.getSettings().setNativeLanguage("ru"); // TODO: 14.02.2016 User must choose native language by himself 
+
+        setToolbar();
+        initView();
+
+        drawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout,toolbar, 0, 0);
+        mDrawerLayout.setDrawerListener(drawerToggle);
+        drawerToggle.syncState();
+        //default it set first item as selected
+        mSelectedId = savedInstanceState == null ? R.id.navigation_item_1: savedInstanceState.getInt("SELECTED_ID");
+        itemSelection(mSelectedId);
+        mDrawer.setCheckedItem(mSelectedId);
+
         //dbApi = DbApi.getInstance(this);
 
 //        ArrayList<Dictionary> dictionaries = getDefaultDictionaries();
@@ -79,24 +97,59 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private ArrayList<Dictionary> getDefaultDictionaries() {
-        ArrayList<Dictionary> dictionaries = new ArrayList<>();
-        dictionaries.add(new Dictionary("Английский", "en", "ru", 0, 1));
-        dictionaries.add(new Dictionary("Немецкий", "de", "ru", 1, 1));
-        dictionaries.add(new Dictionary("Французский", "fr", "ru", 2, 1));
-        dictionaries.add(new Dictionary("Испанский", "es", "ru", 4, 0));
-        return dictionaries;
+    private void setToolbar() {
+        toolbar= (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            toolbar.setTitleTextColor(Color.WHITE);
+            setSupportActionBar(toolbar);
+        }
     }
 
-    private ArrayList<Category> getDefaultCategories() {
-        ArrayList<Category> categories = new ArrayList<>();
-        categories.add(new Category("Избранное", 0));
-        categories.add(new Category("Книги", 1));
-        categories.add(new Category("Семья", 2));
-        categories.add(new Category("Кино", 3));
-        categories.add(new Category("Технологии", 4));
-        categories.add(new Category("Путешествия", -1));
-        return categories;
+    private void initView() {
+        mDrawer= (NavigationView) findViewById(R.id.main_drawer);
+        mDrawer.setNavigationItemSelectedListener(this);
+        mDrawerLayout= (DrawerLayout) findViewById(R.id.drawer_layout);
+    }
+
+    private void itemSelection(int mSelectedId) {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Fragment currentFragment = new FragmentStub();
+        switch(mSelectedId){
+            case R.id.navigation_item_1:
+                currentFragment = new DictionariesListFragment();
+                toolbar.setTitle("Словари");
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+                break;
+
+            case R.id.navigation_item_2:
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+                break;
+        }
+        fragmentTransaction.replace(R.id.content, currentFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem menuItem) {
+        menuItem.setChecked(true);
+        mSelectedId=menuItem.getItemId();
+        itemSelection(mSelectedId);
+        return true;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        //save selected item so it will remains same even after orientation change
+        outState.putInt("SELECTED_ID", mSelectedId);
     }
 
     @Override
@@ -114,15 +167,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // Закрываем Navigation Drawer по нажатию системной кнопки "Назад" если он открыт
-        if (drawerResult.isDrawerOpen()) {
-            drawerResult.closeDrawer();
-        } else {
-            if(fragmentManager.getBackStackEntryCount() > 0) {
-                fragmentManager.popBackStack();
-            } else {
-                super.onBackPressed();
-            }
-        }
+//        if (drawerResult.isDrawerOpen()) {
+//            drawerResult.closeDrawer();
+//        } else {
+//            if(fragmentManager.getBackStackEntryCount() > 0) {
+//                fragmentManager.popBackStack();
+//            } else {
+//                super.onBackPressed();
+//            }
+//        }
     }
 
 //    // Заглушка, работа с меню
@@ -140,98 +193,55 @@ public class MainActivity extends AppCompatActivity {
 //        return super.onOptionsItemSelected(item);
 //    }
 
-    public void prepareDrawer() {
-        drawerResult = new DrawerBuilder()
-                .withActivity(this)
-                .withToolbar(toolbar)
-                .withActionBarDrawerToggle(true)
-                .withHeader(R.layout.drawer_header)
-                .addDrawerItems(
-                        new PrimaryDrawerItem().withName("Словари").withIdentifier(1).withIcon(ContextCompat.getDrawable(this, R.drawable.ic_dictionary)).withBadge("3"),
-                        new PrimaryDrawerItem().withName("Категории").withIcon(ContextCompat.getDrawable(this, R.mipmap.ic_folder)).withBadge("14"),
-                        new PrimaryDrawerItem().withName("Тест").withIcon(ContextCompat.getDrawable(this, R.mipmap.ic_test)),
-                        new PrimaryDrawerItem().withName("Статистика").withIcon(ContextCompat.getDrawable(this, R.drawable.ic_stats)),
-                        new PrimaryDrawerItem().withName("Помощь").withIcon(ContextCompat.getDrawable(this, R.mipmap.ic_info)),
-                        new PrimaryDrawerItem().withName("Настройки").withIcon(ContextCompat.getDrawable(this, R.drawable.ic_settings)),
-                        new PrimaryDrawerItem().withName("Выход").withIcon(ContextCompat.getDrawable(this, R.drawable.ic_exit)))
-                .withOnDrawerListener(new Drawer.OnDrawerListener() {
-                    @Override
-                    public void onDrawerOpened(View drawerView) {
-                        // Скрываем клавиатуру при открытии Navigation Drawer
-                        InputMethodManager inputMethodManager = (InputMethodManager) MainActivity.this.getSystemService(Activity.INPUT_METHOD_SERVICE);
-                        inputMethodManager.hideSoftInputFromWindow(MainActivity.this.getCurrentFocus().getWindowToken(), 0);
-                    }
 
-                    @Override
-                    public void onDrawerClosed(View drawerView) {
-                    }
-
-                    @Override
-                    public void onDrawerSlide(View drawerView, float slideOffset) {
-
-                    }
-                })
-                .withOnDrawerItemClickListener(new OnLingowlDrawerItemClickListener())
-                .withOnDrawerItemLongClickListener(new Drawer.OnDrawerItemLongClickListener() {
-                    @Override
-                    public boolean onItemLongClick(View view, int position, IDrawerItem drawerItem) {
-                        if (drawerItem instanceof SecondaryDrawerItem) {
-                            Toast.makeText(MainActivity.this, MainActivity.this.getString(((SecondaryDrawerItem) drawerItem).getName().getTextRes()), Toast.LENGTH_SHORT).show();
-                        }
-                        return false;
-                    }
-                })
-                .build();
-    }
-
-    class OnLingowlDrawerItemClickListener implements Drawer.OnDrawerItemClickListener {
-        @Override
-        public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-            Log.d("mylog", "Pos: " + position);
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            Fragment currentFragment = new FragmentStub();
-            switch (position) {
-                case 1: {
-                    currentFragment = new DictionariesListFragment();
-                    toolbar.setTitle("Словари");
-                    break;
-                }
-                case 2: {
-                    currentFragment = new CategoriesListFragment();
-                    Bundle arguments = new Bundle();
-                    arguments.putParcelable(Transfer.SELECTED_DICTIONARY.toString(), selectedDictionary);
-                    currentFragment.setArguments(arguments);
-                    toolbar.setTitle("Категории (" + selectedDictionary.getCodeTargetLanguage() + ")");
-                    break;
-                }
-                case 3: {
-                    toolbar.setTitle("Тест");
-                    break;
-                }
-                case 5: {
-                    toolbar.setTitle("Статистика");
-                    break;
-                }
-                case 6: {
-                    toolbar.setTitle("Помощь");
-                    break;
-                }
-                case 7: {
-                    toolbar.setTitle("Настройки");
-                    break;
-                }
-                case 8: {
-                    toolbar.setTitle("Выход");
-                    finish();
-                    break;
-                }
-            }
-            fragmentTransaction.replace(R.id.content, currentFragment);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
-            return false;
-        }
-    }
+//    class OnLingowlDrawerItemClickListener implements Drawer.OnDrawerItemClickListener {
+//        @Override
+//        public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+//            Log.d("mylog", "Pos: " + position);
+//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//            Fragment currentFragment = new FragmentStub();
+//            switch (position) {
+//                case 1: {
+//                    currentFragment = new DictionariesListFragment();
+//                    toolbar.setTitle("Словари");
+//                    break;
+//                }
+//                case 2: {
+//                    currentFragment = new CategoriesListFragment();
+//                    Bundle arguments = new Bundle();
+//                    arguments.putParcelable(Transfer.SELECTED_DICTIONARY.toString(), selectedDictionary);
+//                    currentFragment.setArguments(arguments);
+//                    toolbar.setTitle("Категории (" + selectedDictionary.getCodeTargetLanguage() + ")");
+//                    break;
+//                }
+//                case 3: {
+//                    toolbar.setTitle("Тест");
+//                    break;
+//                }
+//                case 5: {
+//                    toolbar.setTitle("Статистика");
+//                    break;
+//                }
+//                case 6: {
+//                    toolbar.setTitle("Помощь");
+//                    break;
+//                }
+//                case 7: {
+//                    toolbar.setTitle("Настройки");
+//                    break;
+//                }
+//                case 8: {
+//                    toolbar.setTitle("Выход");
+//                    finish();
+//                    break;
+//                }
+//            }
+//            fragmentTransaction.replace(R.id.content, currentFragment);
+//            fragmentTransaction.addToBackStack(null);
+//            fragmentTransaction.commit();
+//            return false;
+//        }
+//    }
 
     @Override
     protected void onDestroy() {
@@ -250,6 +260,7 @@ public class MainActivity extends AppCompatActivity {
         currentFragment.setArguments(arguments);
         toolbar.setTitle("Категории (" + selectedDictionary.getCodeTargetLanguage() + ")");
         container.getSettings().setTargetLanguage(selectedDictionary.getCodeTargetLanguage());
+        container.getSettings().setSelectedDictionary(selectedDictionary);
         fragmentTransaction.replace(R.id.content, currentFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
@@ -279,14 +290,23 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }
             case ADD_CATEGORY: {
-                currentFragment = new CreateCategoryFragment();
-                arguments.putParcelable(Transfer.SELECTED_DICTIONARY.toString(), selectedDictionary);
-                toolbar.setTitle("Создание категории");
-                break;
+                //currentFragment = new CreateCategoryFragment();
+                //arguments.putParcelable(Transfer.SELECTED_DICTIONARY.toString(), selectedDictionary);
+                //toolbar.setTitle("Создание категории");
+                PickCategoryDialogFragment pickCategoryDialogFragment = new PickCategoryDialogFragment();
+                pickCategoryDialogFragment.show(getFragmentManager(), "pick_category");
+                return;
             }
             case ADD_WORD: {
                 currentFragment = new CreateWordFragment();
                 toolbar.setTitle("Добавить новое слово");
+                break;
+            }
+            case CATEGORY_ADDED: {
+                currentFragment = new CategoriesListFragment();
+                arguments.putParcelable(Transfer.SELECTED_DICTIONARY.toString(), selectedDictionary);
+                currentFragment.setArguments(arguments);
+                toolbar.setTitle("Категории (" + selectedDictionary.getCodeTargetLanguage() + ")");
                 break;
             }
         }

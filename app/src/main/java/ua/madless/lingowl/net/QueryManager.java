@@ -9,9 +9,9 @@ import retrofit.Callback;
 import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
-import ua.madless.lingowl.constants.HandlerResponseType;
-import ua.madless.lingowl.constants.YandexDictionary;
-import ua.madless.lingowl.model.server_response.ServerResponse;
+import ua.madless.lingowl.core.constants.HandlerResponseType;
+import ua.madless.lingowl.core.constants.YandexApi;
+import ua.madless.lingowl.core.model.server_response.ServerResponse;
 
 /**
  * Created by madless on 03.01.2016.
@@ -31,14 +31,14 @@ public class QueryManager {
 
     private QueryManager() {
         retrofit = new Retrofit.Builder()
-                .baseUrl(YandexDictionary.BASE_URL)
+                .baseUrl(YandexApi.DICTIONARY_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         serverApi = retrofit.create(DictionaryServerApi.class);
     }
 
     public void executeGetWordsLookup(Handler handler, String word, String language) {
-        Call<ServerResponse> serverResponseCall = serverApi.getWordLookup(YandexDictionary.KEY, language, word);
+        Call<ServerResponse> serverResponseCall = serverApi.getWordLookup(YandexApi.DICTIONARY_KEY, language, word);
         serverResponseCall.enqueue(getCallback(handler, HandlerResponseType.GET_WORD_LOOKUP));
     }
 

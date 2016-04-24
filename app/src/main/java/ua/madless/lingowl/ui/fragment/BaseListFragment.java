@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import ua.madless.lingowl.db.DbApi;
-import ua.madless.lingowl.listener.OnRecyclerViewItemClickListener;
+import ua.madless.lingowl.core.listener.OnRecyclerViewItemClickListener;
 
 /**
  * Created by madless on 07.01.2016.

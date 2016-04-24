@@ -7,9 +7,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.Callable;
 
-import ua.madless.lingowl.model.db_model.Dictionary;
-import ua.madless.lingowl.model.db_model.Word;
-import ua.madless.lingowl.model.YandexDictionaryResponse;
+import ua.madless.lingowl.core.model.db_model.Dictionary;
+import ua.madless.lingowl.core.model.db_model.Word;
+import ua.madless.lingowl.core.model.YandexDictionaryResponse;
 
 @Deprecated
 public class YandexQuery implements Callable<YandexDictionaryResponse> {

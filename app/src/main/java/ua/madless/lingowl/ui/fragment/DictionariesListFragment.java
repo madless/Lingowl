@@ -16,9 +16,9 @@ import java.util.ArrayList;
 
 import ua.madless.lingowl.R;
 import ua.madless.lingowl.ui.adapter.DictionariesListAdapter;
-import ua.madless.lingowl.listener.RecyclerItemClickListener;
-import ua.madless.lingowl.manager.EventBusManager;
-import ua.madless.lingowl.model.db_model.Dictionary;
+import ua.madless.lingowl.core.listener.RecyclerItemClickListener;
+import ua.madless.lingowl.core.manager.EventBusManager;
+import ua.madless.lingowl.core.model.db_model.Dictionary;
 
 public class DictionariesListFragment extends BaseListFragment {
     RecyclerView recyclerViewDictionariesList;

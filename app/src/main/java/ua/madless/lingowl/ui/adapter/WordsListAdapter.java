@@ -13,8 +13,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import ua.madless.lingowl.R;
-import ua.madless.lingowl.manager.IconManager;
-import ua.madless.lingowl.model.db_model.Word;
+import ua.madless.lingowl.core.manager.IconManager;
+import ua.madless.lingowl.core.model.db_model.Word;
 
 public class WordsListAdapter extends RecyclerView.Adapter<WordsListAdapter.ViewHolder> {
     ArrayList<Word> words;

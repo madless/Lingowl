@@ -11,8 +11,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import ua.madless.lingowl.R;
-import ua.madless.lingowl.model.converted_server_response.ConvertedResponseAdapterItem;
-import ua.madless.lingowl.util.StringConverter;
+import ua.madless.lingowl.core.model.converted_server_response.ConvertedResponseAdapterItem;
+import ua.madless.lingowl.core.util.StringConverter;
 
 /**
  * Created by User on 21.02.2016.

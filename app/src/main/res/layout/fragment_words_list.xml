@@ -8,15 +8,6 @@
     tools:context=".FABActivity"
     android:background="@color/color_light_gray">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/editTextSearchWord"
-        android:hint="Поиск"
-        android:textColor="@color/color_black"/>
-
-
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

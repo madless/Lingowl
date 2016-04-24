@@ -18,10 +18,12 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ua.madless.lingowl.R;
+import ua.madless.lingowl.core.constants.Transfer;
+import ua.madless.lingowl.core.model.db_model.Category;
 import ua.madless.lingowl.ui.adapter.WordsListAdapter;
-import ua.madless.lingowl.constants.FragmentRequest;
-import ua.madless.lingowl.manager.EventBusManager;
-import ua.madless.lingowl.model.db_model.Word;
+import ua.madless.lingowl.core.constants.FragmentRequest;
+import ua.madless.lingowl.core.manager.EventBusManager;
+import ua.madless.lingowl.core.model.db_model.Word;
 
 public class WordsListFragment extends BaseListFragment implements View.OnClickListener {
     @Bind(R.id.recyclerViewWordsList) RecyclerView recyclerViewWordsList;
@@ -36,10 +38,10 @@ public class WordsListFragment extends BaseListFragment implements View.OnClickL
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
-
+        Category category = getArguments().getParcelable(Transfer.SELECTED_CATEGORY.toString());
         recyclerViewWordsList.setLayoutManager(layoutManager);
         recyclerViewWordsList.setItemAnimator(itemAnimator);
-        words = getWords();
+        words = dbApi.getWordsInCategory(category);
         WordsListAdapter wordsListAdapter = new WordsListAdapter(getActivity(), words);
 
         eventBus = EventBusManager.getBus();

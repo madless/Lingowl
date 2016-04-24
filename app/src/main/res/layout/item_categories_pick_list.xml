@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_marginBottom="2dp"
+            android:background="@color/color_white" >
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/imageViewCategoryItemPickerIcon"
+                android:src="@mipmap/ic_category_default"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Английский"
+                android:id="@+id/textViewCategoryItemPickerTitle"
+                android:layout_alignParentTop="true"
+                android:textColor="@color/color_black"
+                android:gravity="center_vertical"
+                android:layout_alignBottom="@+id/imageViewCategoryItemPickerIcon"
+                android:layout_toEndOf="@+id/imageViewCategoryItemPickerIcon"
+                android:layout_toRightOf="@+id/imageViewCategoryItemPickerIcon"
+                android:singleLine="true" />
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkBoxCategoryItemPicker"
+                android:checked="false"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="10dp" />
+        </RelativeLayout>
+    </RelativeLayout>
+</LinearLayout>
