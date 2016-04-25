@@ -1,21 +1,17 @@
-package ua.madless.lingowl.ui.fragment;
+package ua.madless.lingowl.ui.activity;
 
-import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -37,21 +33,24 @@ import ru.yandex.speechkit.Synthesis;
 import ru.yandex.speechkit.Vocalizer;
 import ru.yandex.speechkit.VocalizerListener;
 import ua.madless.lingowl.R;
+import ua.madless.lingowl.core.constants.Constants;
 import ua.madless.lingowl.core.constants.HandlerResponseType;
 import ua.madless.lingowl.core.constants.State;
 import ua.madless.lingowl.core.constants.YandexApi;
 import ua.madless.lingowl.core.manager.Container;
+import ua.madless.lingowl.core.manager.IntentHelper;
 import ua.madless.lingowl.core.model.converted_server_response.ConvertedResponseAdapterItem;
 import ua.madless.lingowl.core.model.converted_server_response.ConvertedTranslation;
+import ua.madless.lingowl.core.model.model_for_ui.CheckableCategory;
 import ua.madless.lingowl.core.model.server_response.ServerResponse;
-import ua.madless.lingowl.ui.adapter.TranslationsListAdapter;
 import ua.madless.lingowl.core.util.MeasureUtil;
 import ua.madless.lingowl.core.util.ServerResponseConverter;
+import ua.madless.lingowl.ui.adapter.TranslationsListAdapter;
 
 /**
  * Created by User on 21.02.2016.
  */
-public class CreateWordFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener, View.OnKeyListener {
+public class CreateNewWordActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener, View.OnKeyListener {
     @Bind(R.id.editTextCreateWordWord) EditText editTextInputWord;
     @Bind(R.id.checkBoxAutoTranslate) CheckBox checkBoxAutoTranslate;
     @Bind(R.id.buttonTranslate) Button buttonTranslate;
@@ -75,31 +74,15 @@ public class CreateWordFragment extends Fragment implements View.OnClickListener
     State currentState = State.STANDARD;
     private volatile boolean isTranslated;
 
+    private ArrayList<CheckableCategory> selectedCategories;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SpeechKit.getInstance().configure(getActivity(), YandexApi.SPEECH_KIT_KEY);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
-        View root = inflater.inflate(R.layout.fragment_create_word_new, null);
-        ButterKnife.bind(this, root);
-
-        editTextInputWord.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                if(layoutInputWord.isErrorEnabled()) {
-                    layoutInputWord.setErrorEnabled(false);
-                }
-            }
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            @Override
-            public void afterTextChanged(Editable s) {}
-        });
+        setContentView(R.layout.fragment_create_word_new);
+        ButterKnife.bind(this);
+        SpeechKit.getInstance().configure(this, YandexApi.SPEECH_KIT_KEY);
+        editTextInputWord.addTextChangedListener(new WordTextWatcher());
         if(!isTranslated) {
             wordContent.setVisibility(View.GONE);
             wordContent.setAlpha(0);
@@ -114,8 +97,7 @@ public class CreateWordFragment extends Fragment implements View.OnClickListener
                 break;
             }
         }
-
-        return root;
+        setToolbar();
     }
 
     @OnClick({R.id.buttonTranslate, R.id.editTextCreateWordPickWordCategory, R.id.imageViewCreateWordPlay})
@@ -130,11 +112,12 @@ public class CreateWordFragment extends Fragment implements View.OnClickListener
                 break;
             }
             case R.id.editTextCreateWordPickWordCategory: {
+                IntentHelper.startForResultSelectCategoriesActivity(this, null);
                 break;
             }
             case R.id.imageViewCreateWordPlay: {
                 progressBarWordPlaying.setVisibility(View.VISIBLE);
-                v.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.anim_view_click));
+                v.startAnimation(AnimationUtils.loadAnimation(this, R.anim.anim_view_click));
                 vocalizer = Vocalizer.createVocalizer(container.getSettings().getTargetLanguage(), editTextInputWord.getText().toString(), true, Vocalizer.Voice.JANE);
                 vocalizer.setListener(new VocalizerResponsePlayer());
                 vocalizer.start();
@@ -144,16 +127,15 @@ public class CreateWordFragment extends Fragment implements View.OnClickListener
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.ok_menu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.ok_menu, menu);
+        return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_ok:
+            case R.id.menu_action_item_ok:
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -183,30 +165,30 @@ public class CreateWordFragment extends Fragment implements View.OnClickListener
 
         @Override
         public void onSynthesisBegin(Vocalizer vocalizer) {
-            Log.d(CreateWordFragment.class.getCanonicalName(), "Synthesis begin..");
+            Log.d(CreateNewWordActivity.class.getCanonicalName(), "Synthesis begin..");
         }
 
         @Override
         public void onSynthesisDone(Vocalizer vocalizer, Synthesis synthesis) {
             //vocalizer.play();
             progressBarWordPlaying.setVisibility(View.GONE);
-            Log.d(CreateWordFragment.class.getCanonicalName(), "Synthesis done");
+            Log.d(CreateNewWordActivity.class.getCanonicalName(), "Synthesis done");
         }
 
         @Override
         public void onPlayingBegin(Vocalizer vocalizer) {
-            Log.d(CreateWordFragment.class.getCanonicalName(), "Playing begin..");
+            Log.d(CreateNewWordActivity.class.getCanonicalName(), "Playing begin..");
         }
 
         @Override
         public void onPlayingDone(Vocalizer vocalizer) {
-            Log.d(CreateWordFragment.class.getCanonicalName(), "Playing done");
+            Log.d(CreateNewWordActivity.class.getCanonicalName(), "Playing done");
         }
 
         @Override
         public void onVocalizerError(Vocalizer vocalizer, ru.yandex.speechkit.Error error) {
-            Toast.makeText(getActivity(), "Vocalizer error!", Toast.LENGTH_SHORT).show();
-            Log.d(CreateWordFragment.class.getCanonicalName(), error.getString());
+            Toast.makeText(CreateNewWordActivity.this, "Vocalizer error!", Toast.LENGTH_SHORT).show();
+            Log.d(CreateNewWordActivity.class.getCanonicalName(), error.getString());
         }
     }
 
@@ -224,14 +206,14 @@ public class CreateWordFragment extends Fragment implements View.OnClickListener
                     convertedResponses = responseConverter.convertedResponseToAdapterItems(serverResponse);
                     if(convertedResponses != null && !convertedResponses.isEmpty()) {
                         convertedResponses.get(0).setIsSelected(true);
-                        translationsAdapter = new TranslationsListAdapter(getContext(), convertedResponses);
+                        translationsAdapter = new TranslationsListAdapter(CreateNewWordActivity.this, convertedResponses);
                         listViewTranslations.setAdapter(translationsAdapter);
                         isTranslated = true;
                         wordContent.setVisibility(View.VISIBLE);
-                        wordContent.setTranslationY(MeasureUtil.getDp(getActivity(), 100));
+                        wordContent.setTranslationY(MeasureUtil.getDp(CreateNewWordActivity.this, 100));
                         wordContent.animate().translationY(0).alpha(1);
                     } else {
-                        Toast.makeText(getActivity(), "Ошибка, невозможно перевести введенное слово", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CreateNewWordActivity.this, "Ошибка, невозможно перевести введенное слово", Toast.LENGTH_SHORT).show();
                         layoutInputWord.setErrorEnabled(true);
                         layoutInputWord.setError("Проверьте введенное слово");
                     }
@@ -244,6 +226,37 @@ public class CreateWordFragment extends Fragment implements View.OnClickListener
                     throw new UnsupportedOperationException();
                 }
             }
+        }
+    }
+
+    class WordTextWatcher implements TextWatcher {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            if (layoutInputWord.isErrorEnabled()) {
+                layoutInputWord.setErrorEnabled(false);
+            }
+        }
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {}
+        @Override
+        public void afterTextChanged(Editable s) {}
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(data != null && resultCode == IntentHelper.RESULT_CODE_OK) {
+            selectedCategories = data.getParcelableArrayListExtra(Constants.EXTRA_SELECTED_CATEGORIES);
+            StringBuffer stringBuffer = new StringBuffer();
+            for (int i = 0; i < selectedCategories.size(); i++) {
+                CheckableCategory category = selectedCategories.get(i);
+                stringBuffer.append(category.getName());
+                if(i != selectedCategories.size() - 1) {
+                    stringBuffer.append(", ");
+                }
+            }
+            editTextPickWordCategory.setText(stringBuffer);
+            Toast.makeText(this, selectedCategories.toString(), Toast.LENGTH_SHORT).show();
         }
     }
 }

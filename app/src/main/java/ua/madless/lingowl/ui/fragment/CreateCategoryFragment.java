@@ -67,7 +67,7 @@ public class CreateCategoryFragment extends Fragment implements View.OnClickList
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_ok:
+            case R.id.menu_action_item_ok:
                 Toast.makeText(getActivity(), "Added!", Toast.LENGTH_SHORT).show();
                 return true;
             default:

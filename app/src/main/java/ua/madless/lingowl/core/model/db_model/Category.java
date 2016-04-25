@@ -66,7 +66,7 @@ public class Category implements Parcelable {
         wordCounter = source.readInt();
     }
 
-    final static Creator<Category> CREATOR = new Creator<Category>() {
+    public final static Parcelable.Creator<Category> CREATOR = new Parcelable.Creator<Category>() {
         @Override
         public Category createFromParcel(Parcel source) {
             return new Category(source);

@@ -15,16 +15,15 @@ import com.squareup.otto.Bus;
 import java.util.ArrayList;
 
 import ua.madless.lingowl.R;
+import ua.madless.lingowl.bus.LingllamaBus;
 import ua.madless.lingowl.ui.adapter.CategoriesListAdapter;
 import ua.madless.lingowl.core.constants.FragmentRequest;
 import ua.madless.lingowl.core.constants.Transfer;
 import ua.madless.lingowl.core.listener.RecyclerItemClickListener;
-import ua.madless.lingowl.core.manager.EventBusManager;
 import ua.madless.lingowl.core.model.db_model.Category;
 import ua.madless.lingowl.core.model.db_model.Dictionary;
 
 public class CategoriesListFragment extends BaseListFragment {
-    private Bus eventBus;
     private RecyclerView recyclerViewCategoriesList;
     private FloatingActionButton buttonAddCategory;
     private ArrayList<Category> categories;
@@ -48,7 +47,7 @@ public class CategoriesListFragment extends BaseListFragment {
 
         CategoriesListAdapter categoriesListAdapter = new CategoriesListAdapter(getActivity(), categories);
 
-        eventBus = EventBusManager.getBus();
+        bus = LingllamaBus.getBus();
         recyclerViewCategoriesList.setAdapter(categoriesListAdapter);
         recyclerViewCategoriesList.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), recyclerViewCategoriesList, this));
         buttonAddCategory.setOnClickListener(new FabOnClickListener());
@@ -58,7 +57,7 @@ public class CategoriesListFragment extends BaseListFragment {
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
-        Bus bus = EventBusManager.getBus();
+        Bus bus = LingllamaBus.getBus();
         bus.post(categories.get(position));
     }
 
@@ -67,7 +66,7 @@ public class CategoriesListFragment extends BaseListFragment {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.buttonAddCategory: {
-                    eventBus.post(FragmentRequest.ADD_CATEGORY);
+                    bus.post(FragmentRequest.ADD_CATEGORY);
                     break;
                 }
             }

@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:icon="@drawable/ic_ok_white"
-        android:id="@+id/action_ok"
+        android:id="@+id/menu_action_item_ok"
         android:title="@string/ok"
         app:showAsAction="ifRoom"/>
 </menu>

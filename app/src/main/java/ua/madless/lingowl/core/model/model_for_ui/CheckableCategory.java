@@ -1,6 +1,7 @@
 package ua.madless.lingowl.core.model.model_for_ui;
 
 import android.os.Parcel;
+import android.os.Parcelable;
 
 import ua.madless.lingowl.core.model.db_model.Category;
 
@@ -35,14 +36,10 @@ public class CheckableCategory extends Category {
 
     CheckableCategory(Parcel source) {
         super(source);
-        setId(source.readInt());
-        setName(source.readString());
-        setId(source.readInt());
-        setWordCounter(source.readInt());
         setIsChecked(source.readByte() > 0);
     }
 
-    final static Creator<CheckableCategory> CREATOR = new Creator<CheckableCategory>() {
+    public final static Parcelable.Creator<CheckableCategory> CREATOR = new Parcelable.Creator<CheckableCategory>() {
         @Override
         public CheckableCategory createFromParcel(Parcel source) {
             return new CheckableCategory(source);
@@ -61,10 +58,7 @@ public class CheckableCategory extends Category {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(getId());
-        dest.writeString(getName());
-        dest.writeInt(getIconId());
-        dest.writeInt(getWordCounter());
+        super.writeToParcel(dest, flags);
         dest.writeByte((byte) (isChecked() ? 1 : 0));
     }
 }

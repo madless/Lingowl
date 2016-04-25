@@ -10,20 +10,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.squareup.otto.Bus;
-
 import java.util.ArrayList;
 
 import ua.madless.lingowl.R;
-import ua.madless.lingowl.ui.adapter.DictionariesListAdapter;
+import ua.madless.lingowl.bus.LingllamaBus;
 import ua.madless.lingowl.core.listener.RecyclerItemClickListener;
-import ua.madless.lingowl.core.manager.EventBusManager;
 import ua.madless.lingowl.core.model.db_model.Dictionary;
+import ua.madless.lingowl.ui.adapter.DictionariesListAdapter;
 
 public class DictionariesListFragment extends BaseListFragment {
     RecyclerView recyclerViewDictionariesList;
     ArrayList<Dictionary> dictionaries;
-    Bus eventBus;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,14 +36,14 @@ public class DictionariesListFragment extends BaseListFragment {
         recyclerViewDictionariesList.setAdapter(dictionariesListAdapter);
         recyclerViewDictionariesList.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), recyclerViewDictionariesList, this));
         setHasOptionsMenu(true);
-        eventBus = EventBusManager.getBus();
-        Log.d("mylog", "bus in fragment: " + eventBus.hashCode());
+        bus = LingllamaBus.getBus();
+        Log.d("mylog", "bus in fragment: " + bus.hashCode());
         return root;
     }
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
         Log.d("mylog", "dict: " + dictionaries.get(position));
-        eventBus.post(dictionaries.get(position));
+        bus.post(dictionaries.get(position));
     }
 }

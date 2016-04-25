@@ -35,9 +35,11 @@
                 android:textColor="@color/color_black"
                 android:gravity="center_vertical"
                 android:layout_alignBottom="@+id/imageViewCategoryItemPickerIcon"
-                android:layout_toEndOf="@+id/imageViewCategoryItemPickerIcon"
+                android:singleLine="true"
+                android:layout_toLeftOf="@+id/checkBoxCategoryItemPicker"
                 android:layout_toRightOf="@+id/imageViewCategoryItemPickerIcon"
-                android:singleLine="true" />
+                android:layout_toEndOf="@+id/imageViewCategoryItemPickerIcon"
+                android:layout_toStartOf="@+id/checkBoxCategoryItemPicker" />
 
             <CheckBox
                 android:layout_width="wrap_content"

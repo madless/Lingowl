@@ -1,35 +1,31 @@
-package ua.madless.lingowl.ui;
+package ua.madless.lingowl.ui.activity;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 
-import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
 import ua.madless.lingowl.R;
+import ua.madless.lingowl.bus.events.activities.CreateNewWordEvent;
 import ua.madless.lingowl.core.constants.FragmentRequest;
 import ua.madless.lingowl.core.constants.Transfer;
-import ua.madless.lingowl.db.DbApi;
-import ua.madless.lingowl.core.manager.Container;
-import ua.madless.lingowl.core.manager.EventBusManager;
+import ua.madless.lingowl.core.manager.IntentHelper;
 import ua.madless.lingowl.core.model.db_model.Category;
 import ua.madless.lingowl.core.model.db_model.Dictionary;
+import ua.madless.lingowl.ui.FragmentStub;
 import ua.madless.lingowl.ui.dialog.PickCategoryDialogFragment;
 import ua.madless.lingowl.ui.fragment.CategoriesListFragment;
-import ua.madless.lingowl.ui.fragment.CreateWordFragment;
 import ua.madless.lingowl.ui.fragment.DictionariesListFragment;
 import ua.madless.lingowl.ui.fragment.WordsListFragment;
 
@@ -39,15 +35,13 @@ import ua.madless.lingowl.ui.fragment.WordsListFragment;
 //import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 //import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     //private Drawer drawerResult = null;
     Dictionary selectedDictionary;
-    Toolbar toolbar;
+
     FragmentManager fragmentManager;
-    Bus bus;
-    DbApi dbApi;
-    Container container;
+
 
     private NavigationView mDrawer;
     private DrawerLayout mDrawerLayout;
@@ -58,10 +52,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        bus = EventBusManager.getBus();
         Log.d("mylog", "bus in activity: " + bus.hashCode());
 
-        container = Container.getInstance();
         fragmentManager = getFragmentManager();
         // Инициализируем Toolbar
 //        toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -70,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Инициализируем Navigation Drawer
         //prepareDrawer();
-        container.getSettings().setNativeLanguage("ru"); // TODO: 14.02.2016 User must choose native language by himself 
+        appContainer.getSettings().setNativeLanguage("ru"); // TODO: 14.02.2016 User must choose native language by himself
 
         setToolbar();
         initView();
@@ -82,27 +74,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mSelectedId = savedInstanceState == null ? R.id.navigation_item_1: savedInstanceState.getInt("SELECTED_ID");
         itemSelection(mSelectedId);
         mDrawer.setCheckedItem(mSelectedId);
-
-        //dbApi = DbApi.getInstance(this);
-
-//        ArrayList<Dictionary> dictionaries = getDefaultDictionaries();
-//        for(int i = 0; i < dictionaries.size(); i++) {
-//            dbApi.addDictionary(dictionaries.get(i));
-//        }
-//
-//        ArrayList<Category> categories = getDefaultCategories();
-//        for(int i = 0; i < categories.size(); i++) {
-//            dbApi.addCategory(dictionaries.get(i % 4), categories.get(i));
-//        }
-
-    }
-
-    private void setToolbar() {
-        toolbar= (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            toolbar.setTitleTextColor(Color.WHITE);
-            setSupportActionBar(toolbar);
-        }
     }
 
     private void initView() {
@@ -117,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch(mSelectedId){
             case R.id.navigation_item_1:
                 currentFragment = new DictionariesListFragment();
-                toolbar.setTitle("Словари");
+                toolbar.setTitle(R.string.nav_menu_item_dictionaries);
                 mDrawerLayout.closeDrawer(GravityCompat.START);
                 break;
 
@@ -178,20 +149,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        }
     }
 
-//    // Заглушка, работа с меню
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.main, menu);
-//        return true;
-//    }
-//
-//    // Заглушка, работа с меню
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        int id = item.getItemId();
-//        Log.d("mylog", "ID: " + id);
-//        return super.onOptionsItemSelected(item);
-//    }
+    // Заглушка, работа с меню
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    // Заглушка, работа с меню
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        Log.d("mylog", "ID: " + id);
+        return super.onOptionsItemSelected(item);
+    }
 
 
 //    class OnLingowlDrawerItemClickListener implements Drawer.OnDrawerItemClickListener {
@@ -259,8 +230,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         arguments.putParcelable(Transfer.SELECTED_DICTIONARY.toString(), selectedDictionary);
         currentFragment.setArguments(arguments);
         toolbar.setTitle("Категории (" + selectedDictionary.getCodeTargetLanguage() + ")");
-        container.getSettings().setTargetLanguage(selectedDictionary.getCodeTargetLanguage());
-        container.getSettings().setSelectedDictionary(selectedDictionary);
+        appContainer.getSettings().setTargetLanguage(selectedDictionary.getCodeTargetLanguage());
+        appContainer.getSettings().setSelectedDictionary(selectedDictionary);
         fragmentTransaction.replace(R.id.content, currentFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
@@ -297,11 +268,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 pickCategoryDialogFragment.show(getFragmentManager(), "pick_category");
                 return;
             }
-            case ADD_WORD: {
-                currentFragment = new CreateWordFragment();
-                toolbar.setTitle("Добавить новое слово");
-                break;
-            }
             case CATEGORY_ADDED: {
                 currentFragment = new CategoriesListFragment();
                 arguments.putParcelable(Transfer.SELECTED_DICTIONARY.toString(), selectedDictionary);
@@ -316,15 +282,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.commit();
     }
 
-//    @Subscribe
-//    public void onWordAdd(FragmentEventType fragmentEventType) {
-//        Log.d("mylog_ui", "onWordAdd");
-//        switch (fragmentEventType) {
-//            case ADD_WORD: {
-//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                Fragment currentFragment = new CreateWordFragmentOld();
-//                break;
-//            }
-//        }
-//    }
+    @Subscribe
+    public void processCreateNewWordEvent(CreateNewWordEvent event) {
+        IntentHelper.startCreateWordActivity(this, null);
+    }
 }

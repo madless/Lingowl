@@ -11,6 +11,7 @@ import ua.madless.lingowl.R;
 import ua.madless.lingowl.ui.adapter.DictionariesListAdapter;
 import ua.madless.lingowl.core.model.db_model.Dictionary;
 
+@Deprecated
 public class TestActivity extends AppCompatActivity {
     RecyclerView recyclerViewDictionariesList;
     @Override

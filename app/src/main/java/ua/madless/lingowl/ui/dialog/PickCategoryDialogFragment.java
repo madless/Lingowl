@@ -30,9 +30,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ua.madless.lingowl.R;
+import ua.madless.lingowl.bus.LingllamaBus;
 import ua.madless.lingowl.core.constants.FragmentRequest;
 import ua.madless.lingowl.core.manager.Container;
-import ua.madless.lingowl.core.manager.EventBusManager;
 import ua.madless.lingowl.core.manager.IconManager;
 import ua.madless.lingowl.core.model.db_model.Category;
 
@@ -55,7 +55,7 @@ public class PickCategoryDialogFragment extends DialogFragment implements View.O
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         appContainer = Container.getInstance();
-        eventBus = EventBusManager.getBus();
+        eventBus = LingllamaBus.getBus();
         View root = inflater.inflate(R.layout.dialog_add_category, container);
         ButterKnife.bind(this, root);
         table = (TableLayout) root.findViewById(R.id.tableContent);

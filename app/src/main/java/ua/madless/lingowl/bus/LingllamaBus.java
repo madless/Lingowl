@@ -1,11 +1,11 @@
-package ua.madless.lingowl.core.manager;
+package ua.madless.lingowl.bus;
 
 import com.squareup.otto.Bus;
 
 /**
  * Created by madless on 07.01.2016.
  */
-public class EventBusManager {
+public class LingllamaBus {
     private static Bus bus;
     public static Bus getBus() {
         if(bus == null) {
@@ -13,6 +13,6 @@ public class EventBusManager {
         }
         return bus;
     }
-    private EventBusManager() {
+    private LingllamaBus() {
     }
 }

@@ -3,10 +3,12 @@ package ua.madless.lingowl.ui.adapter;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,11 +22,13 @@ public class CategoriesListPickerAdapter extends RecyclerView.Adapter<Categories
     ArrayList<CheckableCategory> checkableCategories;
     Context context;
     IconManager iconManager;
+    CheckedChangeListener listener;
 
     public CategoriesListPickerAdapter(Context context, ArrayList<CheckableCategory> checkableCategories) {
         this.checkableCategories = checkableCategories;
         this.context = context;
         this.iconManager = new IconManager(context);
+        this.listener = new CheckedChangeListener();
     }
 
     @Override
@@ -39,7 +43,11 @@ public class CategoriesListPickerAdapter extends RecyclerView.Adapter<Categories
         Drawable icon = iconManager.getCategoryIconById(category.getIconId());
         holder.getImageViewCategoryItemIcon().setImageDrawable(icon);
         holder.getTextViewCategoryItemTitle().setText(category.getName());
+
+        holder.getCheckBoxCategoryItemPicker().setOnCheckedChangeListener(null);
         holder.getCheckBoxCategoryItemPicker().setChecked(category.isChecked());
+        holder.getCheckBoxCategoryItemPicker().setTag(position);
+        holder.getCheckBoxCategoryItemPicker().setOnCheckedChangeListener(listener);
     }
 
     @Override
@@ -47,15 +55,16 @@ public class CategoriesListPickerAdapter extends RecyclerView.Adapter<Categories
         return checkableCategories.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView imageViewCategoryItemIcon;
         private TextView textViewCategoryItemTitle;
         private CheckBox checkBoxCategoryItemPicker;
         public ViewHolder(View itemView) {
             super(itemView);
-            imageViewCategoryItemIcon = (ImageView) itemView.findViewById(R.id.imageViewCategoryItemIcon);
-            textViewCategoryItemTitle = (TextView) itemView.findViewById(R.id.textViewCategoryItemTitle);
+            imageViewCategoryItemIcon = (ImageView) itemView.findViewById(R.id.imageViewCategoryItemPickerIcon);
+            textViewCategoryItemTitle = (TextView) itemView.findViewById(R.id.textViewCategoryItemPickerTitle);
             checkBoxCategoryItemPicker = (CheckBox) itemView.findViewById(R.id.checkBoxCategoryItemPicker);
+            //checkBoxCategoryItemPicker.setOnCheckedChangeListener(listener);
         }
 
         public ImageView getImageViewCategoryItemIcon() {
@@ -70,5 +79,13 @@ public class CategoriesListPickerAdapter extends RecyclerView.Adapter<Categories
             return checkBoxCategoryItemPicker;
         }
 
+    }
+
+    class CheckedChangeListener implements CompoundButton.OnCheckedChangeListener {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            Log.d("dmikhov", "onCheckedChanged: " + isChecked);
+            checkableCategories.get((Integer) buttonView.getTag()).setIsChecked(isChecked);
+        }
     }
 }
