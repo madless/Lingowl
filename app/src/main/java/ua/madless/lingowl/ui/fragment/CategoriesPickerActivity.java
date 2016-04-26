@@ -47,7 +47,7 @@ public class CategoriesPickerActivity extends BaseActivity {
         recyclerViewCategoriesList.setLayoutManager(layoutManager);
         recyclerViewCategoriesList.setItemAnimator(itemAnimator);
 
-        selectedDictionary = appContainer.getSettings().getSelectedDictionary();
+        selectedDictionary = container.getSettings().getSelectedDictionary();
 
         categories = CategoryUtil.convertToCheckable(dbApi.getCategoriesInDictionary(selectedDictionary));
 

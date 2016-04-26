@@ -18,6 +18,7 @@ import com.squareup.otto.Subscribe;
 
 import ua.madless.lingowl.R;
 import ua.madless.lingowl.bus.events.activities.CreateNewWordEvent;
+import ua.madless.lingowl.bus.events.fragments.UpdateWordsListEvent;
 import ua.madless.lingowl.core.constants.FragmentRequest;
 import ua.madless.lingowl.core.constants.Transfer;
 import ua.madless.lingowl.core.manager.IntentHelper;
@@ -62,7 +63,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Инициализируем Navigation Drawer
         //prepareDrawer();
-        appContainer.getSettings().setNativeLanguage("ru"); // TODO: 14.02.2016 User must choose native language by himself
+        container.getSettings().setNativeLanguage("ru"); // TODO: 14.02.2016 User must choose native language by himself
 
         setToolbar();
         initView();
@@ -126,13 +127,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     protected void onStart() {
         super.onStart();
-        bus.register(this);
+        //bus.register(this);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        bus.unregister(this);
+        //bus.unregister(this);
     }
 
     @Override
@@ -230,8 +231,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         arguments.putParcelable(Transfer.SELECTED_DICTIONARY.toString(), selectedDictionary);
         currentFragment.setArguments(arguments);
         toolbar.setTitle("Категории (" + selectedDictionary.getCodeTargetLanguage() + ")");
-        appContainer.getSettings().setTargetLanguage(selectedDictionary.getCodeTargetLanguage());
-        appContainer.getSettings().setSelectedDictionary(selectedDictionary);
+        container.getSettings().setTargetLanguage(selectedDictionary.getCodeTargetLanguage());
+        container.getSettings().setSelectedDictionary(selectedDictionary);
         fragmentTransaction.replace(R.id.content, currentFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
@@ -285,5 +286,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Subscribe
     public void processCreateNewWordEvent(CreateNewWordEvent event) {
         IntentHelper.startCreateWordActivity(this, null);
+    }
+
+    @Subscribe
+    public void processUpdateWordsListEvent(UpdateWordsListEvent event) {
+        Log.d("mylog", "processUpdateWordsListEvent MAIN activity");
     }
 }

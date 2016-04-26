@@ -94,5 +94,18 @@ public class TranslationsListAdapter extends BaseAdapter {
         }
     }
 
+    public ConvertedResponseAdapterItem getSelectedTranslation() {
+        for (ConvertedResponseAdapterItem item: convertedResponses) {
+            if(item.isSelected()) {
+                return item; // TODO: 27.04.2016 implement multiple selection!
+            }
+        }
+        if(!convertedResponses.isEmpty()) {
+            return convertedResponses.get(0);
+        } else {
+            return null;
+        }
+    }
+
 
 }

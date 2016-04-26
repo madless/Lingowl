@@ -183,7 +183,7 @@ public class DaoWord extends RealModelDao {
         dbManager.open();
         SQLiteDatabase db = dbManager.getDatabase();
         String selection =
-                "SELECT MAX(w." + FIELD_ID + ") " +
+                "SELECT MAX(" + FIELD_ID + ") " +
                 "FROM " + TABLE_NAME;
         String[] selectionArgs = null;
         Cursor wordCursor = db.rawQuery(selection, selectionArgs);

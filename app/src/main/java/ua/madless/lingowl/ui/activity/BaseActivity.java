@@ -4,11 +4,14 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 
 import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
 import ua.madless.lingowl.R;
 import ua.madless.lingowl.bus.LingllamaBus;
+import ua.madless.lingowl.bus.events.fragments.UpdateWordsListEvent;
 import ua.madless.lingowl.core.manager.Container;
 import ua.madless.lingowl.db.DbApi;
 
@@ -17,7 +20,7 @@ import ua.madless.lingowl.db.DbApi;
  */
 public class BaseActivity extends AppCompatActivity {
     protected Bus bus;
-    protected Container appContainer;
+    protected Container container;
     protected DbApi dbApi;
     protected Toolbar toolbar;
 
@@ -25,8 +28,15 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         bus = LingllamaBus.getBus();
-        appContainer = Container.getInstance();
-        dbApi = appContainer.getDbApi(this);
+        bus.register(this);
+        container = Container.getInstance();
+        dbApi = container.getDbApi(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        bus.unregister(this);
     }
 
     @Override
@@ -40,5 +50,10 @@ public class BaseActivity extends AppCompatActivity {
             toolbar.setTitleTextColor(Color.WHITE);
             setSupportActionBar(toolbar);
         }
+    }
+
+    @Subscribe
+    public void processUpdateWordsListEvent(UpdateWordsListEvent event) {
+        Log.d("mylog", "processUpdateWordsListEvent activity");
     }
 }

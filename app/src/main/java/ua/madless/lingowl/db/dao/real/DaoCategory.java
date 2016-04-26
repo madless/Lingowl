@@ -143,7 +143,7 @@ public class DaoCategory extends RealModelDao {
         SQLiteDatabase db = dbManager.getDatabase();
         ContentValues dictionaryRow = new ContentValues();
         dictionaryRow.put(FIELD_WORD_COUNTER, category.getWordCounter() + 1);
-        String whereClause = FIELD_ID + " = ";
+        String whereClause = FIELD_ID + " = ?";
         String[] whereArgs = new String[]{String.valueOf(category.getId())};
         db.update(TABLE_NAME, dictionaryRow, whereClause, whereArgs);
         Log.d("mylog", "category incremented: " + category.toString());

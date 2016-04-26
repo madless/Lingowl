@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.squareup.otto.Subscribe;
+
 import java.util.ArrayList;
 
 import butterknife.Bind;
@@ -17,6 +19,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ua.madless.lingowl.R;
 import ua.madless.lingowl.bus.events.activities.CreateNewWordEvent;
+import ua.madless.lingowl.bus.events.fragments.UpdateWordsListEvent;
 import ua.madless.lingowl.core.constants.Transfer;
 import ua.madless.lingowl.core.model.db_model.Category;
 import ua.madless.lingowl.core.model.db_model.Word;
@@ -26,6 +29,8 @@ public class WordsListFragment extends BaseListFragment implements View.OnClickL
     @Bind(R.id.recyclerViewWordsList) RecyclerView recyclerViewWordsList;
     @Bind(R.id.buttonAddWord) FloatingActionButton buttonAddCategory;
     ArrayList<Word> words;
+    WordsListAdapter wordsListAdapter;
+    Category category;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -34,15 +39,29 @@ public class WordsListFragment extends BaseListFragment implements View.OnClickL
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
-        Category category = getArguments().getParcelable(Transfer.SELECTED_CATEGORY.toString());
+        category = getArguments().getParcelable(Transfer.SELECTED_CATEGORY.toString());
         recyclerViewWordsList.setLayoutManager(layoutManager);
         recyclerViewWordsList.setItemAnimator(itemAnimator);
-        words = dbApi.getWordsInCategory(category);
-        WordsListAdapter wordsListAdapter = new WordsListAdapter(getActivity(), words);
-
-        recyclerViewWordsList.setAdapter(wordsListAdapter);
+        updateWords();
         setHasOptionsMenu(true);
         return root;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //updateWords();
+    }
+
+    public void updateWords() {
+        words = dbApi.getWordsInCategory(category);
+        wordsListAdapter = new WordsListAdapter(getActivity(), words);
+        recyclerViewWordsList.setAdapter(wordsListAdapter);
+    }
+
+    @Subscribe
+    public void processUpdateWordsListEvent(UpdateWordsListEvent event) {
+        updateWords();
     }
 
     @Override

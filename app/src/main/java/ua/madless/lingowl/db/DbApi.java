@@ -55,6 +55,19 @@ public class DbApi {
         daoDictWord.linkDictionaryWithWord(dictionary, word);
     }
 
+    public void addWord(Dictionary dictionary, ArrayList<? extends Category> categories, Word word) {
+        int wordId = daoWord.getNextId();
+        word.setId(wordId);
+        daoWord.addWord(word);
+        daoDictionary.incrementWordCount(dictionary);
+        for (int i = 0; i < categories.size(); i++) {
+            Category category = categories.get(i);
+            daoCategory.incrementWordCount(category);
+            daoCatWord.linkCategoryWithWord(category, word);
+        }
+        daoDictWord.linkDictionaryWithWord(dictionary, word);
+    }
+
     public void addCategory(Dictionary dictionary, Category category) {
         int categoryId = daoCategory.getNextId();
         category.setId(categoryId);

@@ -33,6 +33,7 @@ import ru.yandex.speechkit.Synthesis;
 import ru.yandex.speechkit.Vocalizer;
 import ru.yandex.speechkit.VocalizerListener;
 import ua.madless.lingowl.R;
+import ua.madless.lingowl.bus.events.fragments.UpdateWordsListEvent;
 import ua.madless.lingowl.core.constants.Constants;
 import ua.madless.lingowl.core.constants.HandlerResponseType;
 import ua.madless.lingowl.core.constants.State;
@@ -41,10 +42,13 @@ import ua.madless.lingowl.core.manager.Container;
 import ua.madless.lingowl.core.manager.IntentHelper;
 import ua.madless.lingowl.core.model.converted_server_response.ConvertedResponseAdapterItem;
 import ua.madless.lingowl.core.model.converted_server_response.ConvertedTranslation;
+import ua.madless.lingowl.core.model.db_model.Dictionary;
+import ua.madless.lingowl.core.model.db_model.Word;
 import ua.madless.lingowl.core.model.model_for_ui.CheckableCategory;
 import ua.madless.lingowl.core.model.server_response.ServerResponse;
 import ua.madless.lingowl.core.util.MeasureUtil;
 import ua.madless.lingowl.core.util.ServerResponseConverter;
+import ua.madless.lingowl.db.DbApi;
 import ua.madless.lingowl.ui.adapter.TranslationsListAdapter;
 
 /**
@@ -63,7 +67,6 @@ public class CreateNewWordActivity extends BaseActivity implements View.OnClickL
     @Bind(R.id.imageViewCreateWordPlay) ImageView imageViewCreateWordPlay;
     @Bind(R.id.progressBarWordPlaying) ProgressBar progressBarWordPlaying;
 
-    Container container;
     Handler handler;
     Vocalizer vocalizer;
 
@@ -134,12 +137,27 @@ public class CreateNewWordActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d("dmikhov", "onOptionsItemSelected()");
         switch (item.getItemId()) {
-            case R.id.menu_action_item_ok:
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+            case R.id.menu_action_item_ok: {
+                Toast.makeText(this, "Add", Toast.LENGTH_SHORT).show();
+                addNewWord();
+                bus.post(new UpdateWordsListEvent());
+                this.finish();
+            }
         }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void addNewWord() {
+        Dictionary dictionary = container.getSettings().getSelectedDictionary();
+        String word = editTextInputWord.getText().toString();
+        ConvertedResponseAdapterItem translationResponse = translationsAdapter.getSelectedTranslation();
+        String translation = translationResponse.getTranslation();
+        String gender = translationResponse.getGender();
+        String partOfSpeech = translationResponse.getPartOfSpeech();
+        Word newWord = new Word(word, translation, gender, partOfSpeech, false);
+        DbApi.getInstance(this).addWord(dictionary, selectedCategories, newWord);
     }
 
     @OnItemClick({R.id.listViewCreateWordTranslations})
