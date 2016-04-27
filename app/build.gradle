@@ -40,5 +40,7 @@ dependencies {
     compile 'com.squareup.retrofit:converter-gson:2.0.0-beta2'
 
     compile 'com.yandex.android:speechkit:2.5.0'
+    
+    compile 'com.yqritc:recyclerview-flexibledivider:1.2.9'
 
 }

@@ -6,7 +6,8 @@
     <color name="color_black">#000</color>
     <color name="color_white">#FFF</color>
     <color name="color_gray">#666</color>
-    <color name="color_light_gray">#EEE</color>
+    <color name="color_light_gray">#E0E0E0</color>
     <color name="color_dark_grey">#333</color>
     <color name="color_transparent">#0FFF</color>
+    <color name="colorMainCategory">#7F91F5</color>
 </resources>

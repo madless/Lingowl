@@ -78,7 +78,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void initView() {
-        mDrawer= (NavigationView) findViewById(R.id.main_drawer);
+        mDrawer = (NavigationView) findViewById(R.id.main_drawer);
         mDrawer.setNavigationItemSelectedListener(this);
         mDrawerLayout= (DrawerLayout) findViewById(R.id.drawer_layout);
     }
@@ -98,7 +98,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
         }
         fragmentTransaction.replace(R.id.content, currentFragment);
-        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.addToBackStack("");
         fragmentTransaction.commit();
 
     }
@@ -138,16 +138,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public void onBackPressed() {
-        // Закрываем Navigation Drawer по нажатию системной кнопки "Назад" если он открыт
-//        if (drawerResult.isDrawerOpen()) {
-//            drawerResult.closeDrawer();
-//        } else {
-//            if(fragmentManager.getBackStackEntryCount() > 0) {
-//                fragmentManager.popBackStack();
-//            } else {
-//                super.onBackPressed();
-//            }
-//        }
+        if(mDrawerLayout.isDrawerOpen(mDrawer)) {
+            mDrawerLayout.closeDrawer(mDrawer);
+        } else {
+            if(fragmentManager.getBackStackEntryCount() > 0) {
+                fragmentManager.popBackStack();
+            } else {
+                super.onBackPressed();
+            }
+        }
     }
 
     // Заглушка, работа с меню
@@ -164,56 +163,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         Log.d("mylog", "ID: " + id);
         return super.onOptionsItemSelected(item);
     }
-
-
-//    class OnLingowlDrawerItemClickListener implements Drawer.OnDrawerItemClickListener {
-//        @Override
-//        public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-//            Log.d("mylog", "Pos: " + position);
-//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//            Fragment currentFragment = new FragmentStub();
-//            switch (position) {
-//                case 1: {
-//                    currentFragment = new DictionariesListFragment();
-//                    toolbar.setTitle("Словари");
-//                    break;
-//                }
-//                case 2: {
-//                    currentFragment = new CategoriesListFragment();
-//                    Bundle arguments = new Bundle();
-//                    arguments.putParcelable(Transfer.SELECTED_DICTIONARY.toString(), selectedDictionary);
-//                    currentFragment.setArguments(arguments);
-//                    toolbar.setTitle("Категории (" + selectedDictionary.getCodeTargetLanguage() + ")");
-//                    break;
-//                }
-//                case 3: {
-//                    toolbar.setTitle("Тест");
-//                    break;
-//                }
-//                case 5: {
-//                    toolbar.setTitle("Статистика");
-//                    break;
-//                }
-//                case 6: {
-//                    toolbar.setTitle("Помощь");
-//                    break;
-//                }
-//                case 7: {
-//                    toolbar.setTitle("Настройки");
-//                    break;
-//                }
-//                case 8: {
-//                    toolbar.setTitle("Выход");
-//                    finish();
-//                    break;
-//                }
-//            }
-//            fragmentTransaction.replace(R.id.content, currentFragment);
-//            fragmentTransaction.addToBackStack(null);
-//            fragmentTransaction.commit();
-//            return false;
-//        }
-//    }
 
     @Override
     protected void onDestroy() {
@@ -234,7 +183,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         container.getSettings().setTargetLanguage(selectedDictionary.getCodeTargetLanguage());
         container.getSettings().setSelectedDictionary(selectedDictionary);
         fragmentTransaction.replace(R.id.content, currentFragment);
-        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.addToBackStack("");
         fragmentTransaction.commit();
     }
 
@@ -248,7 +197,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         currentFragment.setArguments(arguments);
         toolbar.setTitle(category.getName());
         fragmentTransaction.replace(R.id.content, currentFragment);
-        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.addToBackStack("");
         fragmentTransaction.commit();
     }
 
@@ -279,7 +228,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
         currentFragment.setArguments(arguments);
         fragmentTransaction.replace(R.id.content, currentFragment);
-        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.addToBackStack("");
         fragmentTransaction.commit();
     }
 

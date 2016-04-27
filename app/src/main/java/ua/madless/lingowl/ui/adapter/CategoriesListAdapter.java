@@ -2,6 +2,7 @@ package ua.madless.lingowl.ui.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import ua.madless.lingowl.R;
+import ua.madless.lingowl.core.constants.Constants;
 import ua.madless.lingowl.core.manager.IconManager;
 import ua.madless.lingowl.core.model.db_model.Category;
 
@@ -39,6 +41,11 @@ public class CategoriesListAdapter extends RecyclerView.Adapter<CategoriesListAd
         holder.getImageViewCategoryItemIcon().setImageDrawable(icon);
         holder.getTextViewCategoryItemTitle().setText(category.getName());
         holder.getTextViewCategoryItemCounter().setText(String.valueOf(category.getWordCounter()));
+        if(category.getId() == Constants.CATEGORY_MAIN_ID) {
+            holder.setAsMainCategory();
+        } else {
+            holder.setAsSimpleCategory();
+        }
     }
 
     @Override
@@ -47,11 +54,14 @@ public class CategoriesListAdapter extends RecyclerView.Adapter<CategoriesListAd
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
+        public View root;
         public ImageView imageViewCategoryItemIcon;
         public TextView textViewCategoryItemTitle;
         public TextView textViewCategoryItemCounter;
         public ViewHolder(View itemView) {
             super(itemView);
+            root = itemView;
+
             imageViewCategoryItemIcon = (ImageView) itemView.findViewById(R.id.imageViewCategoryItemIcon);
             textViewCategoryItemTitle = (TextView) itemView.findViewById(R.id.textViewCategoryItemTitle);
             textViewCategoryItemCounter = (TextView) itemView.findViewById(R.id.textViewCategoryItemCounter);
@@ -67,6 +77,14 @@ public class CategoriesListAdapter extends RecyclerView.Adapter<CategoriesListAd
 
         public TextView getTextViewCategoryItemCounter() {
             return textViewCategoryItemCounter;
+        }
+
+        public void setAsMainCategory() { // with all words
+            root.setBackgroundColor(ContextCompat.getColor(context, R.color.colorAccent));
+        }
+
+        public void setAsSimpleCategory() { // with all words
+            root.setBackgroundColor(ContextCompat.getColor(context, R.color.color_transparent));
         }
     }
 }

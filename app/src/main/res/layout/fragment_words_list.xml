@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FABActivity"
-    android:background="@color/color_light_gray">
+    tools:context=".FABActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -15,7 +14,10 @@
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/recyclerViewWordsList"/>
+            android:id="@+id/recyclerViewWordsList"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?android:attr/selectableItemBackground"/>
 
     </RelativeLayout>
 

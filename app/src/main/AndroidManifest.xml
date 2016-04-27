@@ -13,7 +13,8 @@
         <activity
             android:name=".ui.activity.MainActivity"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden"
-            android:theme="@style/NavActivityTheme">
+            android:theme="@style/NavActivityTheme"
+            android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

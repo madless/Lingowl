@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import ua.madless.lingowl.db.DBManager;
 //import ua.madless.lingowl.db.dao.link.DaoDictWord;
@@ -63,6 +64,8 @@ public class DaoWord extends RealModelDao {
                 " FROM " + TABLE_NAME + " as w, " + DaoCatWord.LINK_TABLE_NAME + " as dw " +
                 " WHERE dw." + DaoCatWord.LINK_FIELD_ID_CAT + " = ? AND w." + FIELD_ID + " = dw." + DaoCatWord.LINK_FIELD_ID_WORD;
         String[] selectionArgs = {String.valueOf(category.getId())};
+        Log.d("dmikhov", "selection: " + selection);
+        Log.d("dmikhov", "selectionArgs: " + Arrays.toString(selectionArgs));
         Cursor wordCursor = db.rawQuery(selection, selectionArgs);
         if(wordCursor.moveToFirst()) {
             int idColIndex = wordCursor.getColumnIndex(FIELD_ID);
@@ -72,6 +75,10 @@ public class DaoWord extends RealModelDao {
             int genderColIndex = wordCursor.getColumnIndex(FIELD_GENDER);
             int numberColIndex = wordCursor.getColumnIndex(FIELD_NUMBER);
             int isFavoriteIndex = wordCursor.getColumnIndex(FIELD_IS_FAVORITE);
+            Log.d("dmikhov", "idColIndex: " + idColIndex);
+            Log.d("dmikhov", "translationColIndex: " + idColIndex);
+            Log.d("dmikhov", "numberColIndex: " + numberColIndex);
+            Log.d("dmikhov", "isFavoriteIndex: " + isFavoriteIndex);
             do {
                 int id = wordCursor.getInt(idColIndex);
                 String text = wordCursor.getString(textColIndex);
@@ -96,10 +103,12 @@ public class DaoWord extends RealModelDao {
         dbManager.open();
         SQLiteDatabase db = dbManager.getDatabase();
         ArrayList<Word> words = new ArrayList<>();
-        String selection = "SELECT w." + FIELD_ID + ", w." + FIELD_TEXT + ", w." + FIELD_TRANSLATION + ", w." + FIELD_PART_OF_SPEECH + ", w." + FIELD_GENDER + ", w." + FIELD_NUMBER +
+        String selection = "SELECT w." + FIELD_ID + ", w." + FIELD_TEXT + ", w." + FIELD_TRANSLATION + ", w." + FIELD_PART_OF_SPEECH + ", w." + FIELD_GENDER + ", w." + FIELD_NUMBER + ", w." + FIELD_IS_FAVORITE +
                 " FROM " + TABLE_NAME + " as w, " + DaoDictWord.LINK_TABLE_NAME + " as dw " +
                 " WHERE dw." + DaoDictWord.LINK_FIELD_ID_DICT + " = ? AND w." + FIELD_ID + " = dw." + DaoDictWord.LINK_FIELD_ID_WORD;
         String[] selectionArgs = {String.valueOf(dictionary.getId())};
+        Log.d("dmikhov", "selection: " + selection);
+        Log.d("dmikhov", "selectionArgs: " + Arrays.toString(selectionArgs));
         Cursor wordCursor = db.rawQuery(selection, selectionArgs);
         if(wordCursor.moveToFirst()) {
             int idColIndex = wordCursor.getColumnIndex(FIELD_ID);
@@ -109,6 +118,10 @@ public class DaoWord extends RealModelDao {
             int genderColIndex = wordCursor.getColumnIndex(FIELD_GENDER);
             int numberColIndex = wordCursor.getColumnIndex(FIELD_NUMBER);
             int isFavoriteIndex = wordCursor.getColumnIndex(FIELD_IS_FAVORITE);
+            Log.d("dmikhov", "idColIndex: " + idColIndex);
+            Log.d("dmikhov", "translationColIndex: " + idColIndex);
+            Log.d("dmikhov", "numberColIndex: " + numberColIndex);
+            Log.d("dmikhov", "isFavoriteIndex: " + isFavoriteIndex);
             do {
                 int id = wordCursor.getInt(idColIndex);
                 String text = wordCursor.getString(textColIndex);

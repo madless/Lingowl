@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 import ua.madless.lingowl.R;
 import ua.madless.lingowl.bus.LingllamaBus;
+import ua.madless.lingowl.core.constants.Constants;
 import ua.madless.lingowl.ui.adapter.CategoriesListAdapter;
 import ua.madless.lingowl.core.constants.FragmentRequest;
 import ua.madless.lingowl.core.constants.Transfer;
@@ -43,7 +44,9 @@ public class CategoriesListFragment extends BaseListFragment {
 
         selectedDictionary = getArguments().getParcelable(Transfer.SELECTED_DICTIONARY.toString());
 
+        Category all = new Category(Constants.CATEGORY_MAIN_ID, getActivity().getString(R.string.category_all_words), 0, selectedDictionary.getWordCounter());
         categories = dbApi.getCategoriesInDictionary(selectedDictionary);
+        categories.add(0, all);
 
         CategoriesListAdapter categoriesListAdapter = new CategoriesListAdapter(getActivity(), categories);
 

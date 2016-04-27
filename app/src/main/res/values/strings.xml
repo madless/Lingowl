@@ -25,4 +25,9 @@
     <string name="ok">ok</string>
     <string name="menu_item_add">Add</string>
     <string name="nav_menu_item_dictionaries">Словари</string>
+    <string name="category_all_words">Все слова</string>
+    <string name="popup_action_open">Открыть</string>
+    <string name="popup_action_edit">Изменить</string>
+    <string name="popup_action_delete">Удалить</string>
+    <string name="error">Ошибка</string>
 </resources>
