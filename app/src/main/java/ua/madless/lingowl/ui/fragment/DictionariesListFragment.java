@@ -13,7 +13,8 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import ua.madless.lingowl.R;
-import ua.madless.lingowl.bus.LingllamaBus;
+import ua.madless.lingowl.bus.events.ToolbarTitleChangedEvent;
+import ua.madless.lingowl.bus.events.fragments.DictionarySelectedEvent;
 import ua.madless.lingowl.core.listener.RecyclerItemClickListener;
 import ua.madless.lingowl.core.model.db_model.Dictionary;
 import ua.madless.lingowl.ui.adapter.DictionariesListAdapter;
@@ -36,14 +37,18 @@ public class DictionariesListFragment extends BaseListFragment {
         recyclerViewDictionariesList.setAdapter(dictionariesListAdapter);
         recyclerViewDictionariesList.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), recyclerViewDictionariesList, this));
         setHasOptionsMenu(true);
-        bus = LingllamaBus.getBus();
-        Log.d("mylog", "bus in fragment: " + bus.hashCode());
         return root;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        bus.post(new ToolbarTitleChangedEvent(getString(R.string.toolbar_title_dictionaries)));
     }
 
     @Override
     public void onRecyclerViewItemClick(View view, int position) {
         Log.d("mylog", "dict: " + dictionaries.get(position));
-        bus.post(dictionaries.get(position));
+        bus.post(new DictionarySelectedEvent(dictionaries.get(position)));
     }
 }

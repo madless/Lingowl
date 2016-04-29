@@ -10,12 +10,11 @@ import ua.madless.lingowl.db.DbApi;
  * Created by madless on 07.01.2016.
  */
 public abstract class BaseListFragment extends BaseFragment implements OnRecyclerViewItemClickListener {
-    DbApi dbApi;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dbApi = DbApi.getInstance(getActivity());
+        dbApi = DbApi.getInstance();
     }
 
     @Override

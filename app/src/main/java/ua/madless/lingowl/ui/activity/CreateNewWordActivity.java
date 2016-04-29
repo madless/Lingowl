@@ -48,7 +48,6 @@ import ua.madless.lingowl.core.model.model_for_ui.CheckableCategory;
 import ua.madless.lingowl.core.model.server_response.ServerResponse;
 import ua.madless.lingowl.core.util.MeasureUtil;
 import ua.madless.lingowl.core.util.ServerResponseConverter;
-import ua.madless.lingowl.db.DbApi;
 import ua.madless.lingowl.ui.adapter.TranslationsListAdapter;
 
 /**
@@ -77,7 +76,7 @@ public class CreateNewWordActivity extends BaseActivity implements View.OnClickL
     State currentState = State.STANDARD;
     private volatile boolean isTranslated;
 
-    private ArrayList<CheckableCategory> selectedCategories;
+    private ArrayList<CheckableCategory> selectedCategories = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -100,7 +99,7 @@ public class CreateNewWordActivity extends BaseActivity implements View.OnClickL
                 break;
             }
         }
-        setToolbar();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @OnClick({R.id.buttonTranslate, R.id.editTextCreateWordPickWordCategory, R.id.imageViewCreateWordPlay})
@@ -137,13 +136,17 @@ public class CreateNewWordActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d("dmikhov", "onOptionsItemSelected()");
         switch (item.getItemId()) {
             case R.id.menu_action_item_ok: {
-                Toast.makeText(this, "Add", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.word_created, Toast.LENGTH_SHORT).show();
                 addNewWord();
                 bus.post(new UpdateWordsListEvent());
                 this.finish();
+                break;
+            }
+            case android.R.id.home: {
+                onBackPressed();
+                break;
             }
         }
         return super.onOptionsItemSelected(item);
@@ -157,7 +160,7 @@ public class CreateNewWordActivity extends BaseActivity implements View.OnClickL
         String gender = translationResponse.getGender();
         String partOfSpeech = translationResponse.getPartOfSpeech();
         Word newWord = new Word(word, translation, gender, partOfSpeech, false);
-        DbApi.getInstance(this).addWord(dictionary, selectedCategories, newWord);
+        container.getDbApi().addWord(dictionary, selectedCategories, newWord);
     }
 
     @OnItemClick({R.id.listViewCreateWordTranslations})
@@ -231,16 +234,14 @@ public class CreateNewWordActivity extends BaseActivity implements View.OnClickL
                         wordContent.setTranslationY(MeasureUtil.getDp(CreateNewWordActivity.this, 100));
                         wordContent.animate().translationY(0).alpha(1);
                     } else {
-                        Toast.makeText(CreateNewWordActivity.this, "Ошибка, невозможно перевести введенное слово", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CreateNewWordActivity.this, R.string.translation_error, Toast.LENGTH_SHORT).show();
                         layoutInputWord.setErrorEnabled(true);
-                        layoutInputWord.setError("Проверьте введенное слово");
+                        layoutInputWord.setError(getString(R.string.translation_check_input));
                     }
                     // TODO: 14.02.2016 HANDLE VIEW DATA
-                    Log.d("mylog", "GOT WORD LOOKUP!");
                     break;
                 }
                 default: {
-                    Log.d("mylog", "CREATE WORD HANDLER ERROR!");
                     throw new UnsupportedOperationException();
                 }
             }
@@ -264,17 +265,19 @@ public class CreateNewWordActivity extends BaseActivity implements View.OnClickL
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(data != null && resultCode == IntentHelper.RESULT_CODE_OK) {
-            selectedCategories = data.getParcelableArrayListExtra(Constants.EXTRA_SELECTED_CATEGORIES);
-            StringBuffer stringBuffer = new StringBuffer();
-            for (int i = 0; i < selectedCategories.size(); i++) {
-                CheckableCategory category = selectedCategories.get(i);
-                stringBuffer.append(category.getName());
-                if(i != selectedCategories.size() - 1) {
-                    stringBuffer.append(", ");
+            ArrayList<CheckableCategory> resultCategories = data.getParcelableArrayListExtra(Constants.EXTRA_SELECTED_CATEGORIES);
+            if(resultCategories != null) {
+                selectedCategories = resultCategories;
+                StringBuffer stringBuffer = new StringBuffer();
+                for (int i = 0; i < selectedCategories.size(); i++) {
+                    CheckableCategory category = selectedCategories.get(i);
+                    stringBuffer.append(category.getName());
+                    if (i != selectedCategories.size() - 1) {
+                        stringBuffer.append(", ");
+                    }
                 }
+                editTextPickWordCategory.setText(stringBuffer);
             }
-            editTextPickWordCategory.setText(stringBuffer);
-            Toast.makeText(this, selectedCategories.toString(), Toast.LENGTH_SHORT).show();
         }
     }
 }

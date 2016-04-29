@@ -1,6 +1,5 @@
 package ua.madless.lingowl.ui.fragment;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -17,7 +16,6 @@ import android.widget.Toast;
 
 import ua.madless.lingowl.R;
 import ua.madless.lingowl.core.constants.Transfer;
-import ua.madless.lingowl.db.DbApi;
 import ua.madless.lingowl.core.model.db_model.Category;
 import ua.madless.lingowl.core.model.db_model.Dictionary;
 
@@ -25,8 +23,7 @@ import ua.madless.lingowl.core.model.db_model.Dictionary;
  * Created by User on 18.01.2016.
  */
 @Deprecated
-public class CreateCategoryFragment extends Fragment implements View.OnClickListener {
-    DbApi dbApi;
+public class CreateCategoryFragment extends BaseFragment implements View.OnClickListener {
     Button buttonCreateCategoryCancel;
     Button buttonCreateCategorySave;
     ImageView imageViewCreateCategoryPickIcon;
@@ -36,7 +33,6 @@ public class CreateCategoryFragment extends Fragment implements View.OnClickList
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_create_category, null);
-        dbApi = DbApi.getInstance(getActivity());
         currentDictionary = getArguments().getParcelable(Transfer.SELECTED_DICTIONARY.toString());
         editTextCreateCategoryTitle = (EditText) root.findViewById(R.id.editTextCreateCategoryTitle);
         imageViewCreateCategoryPickIcon = (ImageView) root.findViewById(R.id.imageViewCreateCategoryPickIcon);

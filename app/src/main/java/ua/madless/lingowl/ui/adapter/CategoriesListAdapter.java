@@ -80,11 +80,11 @@ public class CategoriesListAdapter extends RecyclerView.Adapter<CategoriesListAd
         }
 
         public void setAsMainCategory() { // with all words
-            root.setBackgroundColor(ContextCompat.getColor(context, R.color.colorAccent));
+            textViewCategoryItemTitle.setTextColor(ContextCompat.getColor(context, R.color.colorPrimaryDark));
         }
 
         public void setAsSimpleCategory() { // with all words
-            root.setBackgroundColor(ContextCompat.getColor(context, R.color.color_transparent));
+            textViewCategoryItemTitle.setTextColor(ContextCompat.getColor(context, R.color.color_black));
         }
     }
 }

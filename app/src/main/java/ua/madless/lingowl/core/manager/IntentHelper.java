@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import ua.madless.lingowl.ui.activity.CreateNewWordActivity;
-import ua.madless.lingowl.ui.fragment.CategoriesPickerActivity;
+import ua.madless.lingowl.ui.activity.CategoriesPickerActivity;
 
 /**
  * Created by User on 25.04.2016.

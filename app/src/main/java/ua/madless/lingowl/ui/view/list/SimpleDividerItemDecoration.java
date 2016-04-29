@@ -1,4 +1,4 @@
-package ua.madless.lingowl.ui;
+package ua.madless.lingowl.ui.view.list;
 
 import android.content.Context;
 import android.graphics.Canvas;

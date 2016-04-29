@@ -138,13 +138,13 @@ public class DaoCategory extends RealModelDao {
         return categories;
     }
 
-    public void incrementWordCount(Category category) {
-        countOperation(category, 1);
+    public void incrementWordCount(Category category, int count) {
+        countOperation(category, count);
         Log.d("mylog", "category incremented: " + category.toString());
     }
 
-    public void decrementWordCount(Category category) {
-        countOperation(category, -1);
+    public void decrementWordCount(Category category, int count) {
+        countOperation(category, -count);
         Log.d("mylog", "category decremented: " + category.toString());
     }
 
@@ -156,6 +156,15 @@ public class DaoCategory extends RealModelDao {
         String whereClause = FIELD_ID + " = ?";
         String[] whereArgs = new String[]{String.valueOf(category.getId())};
         db.update(TABLE_NAME, dictionaryRow, whereClause, whereArgs);
+        dbManager.close();
+    }
+
+    public void deleteCategory(Category category) {
+        dbManager.open();
+        SQLiteDatabase db = dbManager.getDatabase();
+        String whereClause = FIELD_ID + " = ? ";
+        String[] whereArgs = new String[]{String.valueOf(category.getId())};
+        db.delete(TABLE_NAME, whereClause, whereArgs);
         dbManager.close();
     }
 

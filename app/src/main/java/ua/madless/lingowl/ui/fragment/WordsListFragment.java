@@ -22,6 +22,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ua.madless.lingowl.R;
+import ua.madless.lingowl.bus.events.ToolbarTitleChangedEvent;
 import ua.madless.lingowl.bus.events.activities.CreateNewWordEvent;
 import ua.madless.lingowl.bus.events.fragments.UpdateWordsListEvent;
 import ua.madless.lingowl.core.constants.Constants;
@@ -61,6 +62,7 @@ public class WordsListFragment extends BaseListFragment implements View.OnClickL
     @Override
     public void onStart() {
         super.onStart();
+        bus.post(new ToolbarTitleChangedEvent(category.getName()));
     }
 
     public void updateWords() {

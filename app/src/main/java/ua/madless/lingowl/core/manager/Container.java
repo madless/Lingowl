@@ -1,21 +1,15 @@
 package ua.madless.lingowl.core.manager;
 
-import android.content.Context;
-
-import ua.madless.lingowl.db.DbApi;
 import ua.madless.lingowl.core.holder.SettingsHolder;
-import ua.madless.lingowl.net.QueryManager;
 import ua.madless.lingowl.core.util.ServerResponseConverter;
+import ua.madless.lingowl.db.DbApi;
+import ua.madless.lingowl.net.QueryManager;
 
 /**
  * Created by User on 14.02.2016.
  */
 public class Container {
     private static Container instance;
-    private DbApi dbApi;
-    private QueryManager queryManager;
-    private ServerResponseConverter responseConverter;
-    private SettingsHolder settings;
 
     private Container() {}
 
@@ -26,31 +20,23 @@ public class Container {
         return instance;
     }
 
-    public DbApi getDbApi(Context context) {
-        if(dbApi == null) {
-            dbApi = DbApi.getInstance(context);
-        }
-        return dbApi;
+    public DbApi getDbApi() {
+        return DbApi.getInstance();
     }
 
     public QueryManager getQueryManager() {
-        if(queryManager == null) {
-            queryManager = QueryManager.getInstance();
-        }
-        return queryManager;
+        return QueryManager.getInstance();
     }
 
     public SettingsHolder getSettings() {
-        if(settings == null) {
-            settings = new SettingsHolder();
-        }
-        return settings;
+        return SettingsHolder.getInstance();
     }
 
     public ServerResponseConverter getResponseConverter() {
-        if(responseConverter == null) {
-            responseConverter = ServerResponseConverter.getInstance();
-        }
-        return responseConverter;
+        return ServerResponseConverter.getInstance();
+    }
+
+    public PreferencesManager getPreferencesManager() {
+        return PreferencesManager.getInstance();
     }
 }

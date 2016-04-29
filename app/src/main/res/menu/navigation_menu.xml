@@ -3,31 +3,31 @@
     tools:context="com.example.dmikhov.navdrawtest.MainActivity">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/navigation_item_1"
+            android:id="@+id/navigation_item_dictionaries"
             android:icon="@drawable/ic_dictionary"
             android:title="Словари" />
         <item
-            android:id="@+id/navigation_item_2"
+            android:id="@+id/navigation_item_categories"
             android:icon="@mipmap/ic_folder"
             android:title="Категории"/>
         <item
-            android:id="@+id/navigation_item_3"
+            android:id="@+id/navigation_item_tests"
             android:icon="@mipmap/ic_test"
             android:title="Тест"/>
         <item
-            android:id="@+id/navigation_item_4"
+            android:id="@+id/navigation_item_stats"
             android:icon="@drawable/ic_stats"
             android:title="Статистика"/>
         <item
-            android:id="@+id/navigation_item_5"
+            android:id="@+id/navigation_item_settings"
             android:icon="@drawable/ic_settings"
             android:title="Настройки"/>
         <item
-            android:id="@+id/navigation_item_6"
+            android:id="@+id/navigation_item_about"
             android:icon="@mipmap/ic_info"
             android:title="О программе"/>
         <item
-            android:id="@+id/navigation_item_7"
+            android:id="@+id/navigation_item_exit"
             android:icon="@drawable/ic_exit"
             android:title="Выход"/>
     </group>

@@ -17,14 +17,16 @@ import android.view.MenuItem;
 import com.squareup.otto.Subscribe;
 
 import ua.madless.lingowl.R;
+import ua.madless.lingowl.bus.events.ToolbarTitleChangedEvent;
 import ua.madless.lingowl.bus.events.activities.CreateNewWordEvent;
+import ua.madless.lingowl.bus.events.fragments.DictionarySelectedEvent;
 import ua.madless.lingowl.bus.events.fragments.UpdateWordsListEvent;
+import ua.madless.lingowl.core.constants.Constants;
 import ua.madless.lingowl.core.constants.FragmentRequest;
 import ua.madless.lingowl.core.constants.Transfer;
 import ua.madless.lingowl.core.manager.IntentHelper;
 import ua.madless.lingowl.core.model.db_model.Category;
 import ua.madless.lingowl.core.model.db_model.Dictionary;
-import ua.madless.lingowl.ui.FragmentStub;
 import ua.madless.lingowl.ui.dialog.PickCategoryDialogFragment;
 import ua.madless.lingowl.ui.fragment.CategoriesListFragment;
 import ua.madless.lingowl.ui.fragment.DictionariesListFragment;
@@ -39,15 +41,15 @@ import ua.madless.lingowl.ui.fragment.WordsListFragment;
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     //private Drawer drawerResult = null;
-    Dictionary selectedDictionary;
+    //Dictionary selectedDictionary;
 
     FragmentManager fragmentManager;
 
 
-    private NavigationView mDrawer;
-    private DrawerLayout mDrawerLayout;
+    private NavigationView drawer;
+    private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
-    private int mSelectedId;
+    private int selectedNavItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,50 +58,57 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         Log.d("mylog", "bus in activity: " + bus.hashCode());
 
         fragmentManager = getFragmentManager();
-        // Инициализируем Toolbar
-//        toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.color_white));
-//        setSupportActionBar(toolbar);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        // Инициализируем Navigation Drawer
-        //prepareDrawer();
-        container.getSettings().setNativeLanguage("ru"); // TODO: 14.02.2016 User must choose native language by himself
+        container.getSettings().setNativeLanguage(Constants.LANG_RUSSIAN); // TODO: 14.02.2016 User must choose native language by himself
 
         setToolbar();
         initView();
+        initDrawer();
+        initDrawerLaunchSelection();
+    }
 
-        drawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout,toolbar, 0, 0);
-        mDrawerLayout.setDrawerListener(drawerToggle);
+    private void initDrawer() {
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, 0, 0);
+        drawerLayout.setDrawerListener(drawerToggle);
         drawerToggle.syncState();
-        //default it set first item as selected
-        mSelectedId = savedInstanceState == null ? R.id.navigation_item_1: savedInstanceState.getInt("SELECTED_ID");
-        itemSelection(mSelectedId);
-        mDrawer.setCheckedItem(mSelectedId);
     }
 
     private void initView() {
-        mDrawer = (NavigationView) findViewById(R.id.main_drawer);
-        mDrawer.setNavigationItemSelectedListener(this);
-        mDrawerLayout= (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (NavigationView) findViewById(R.id.main_drawer);
+        drawer.setNavigationItemSelectedListener(this);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
     }
 
-    private void itemSelection(int mSelectedId) {
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        Fragment currentFragment = new FragmentStub();
-        switch(mSelectedId){
-            case R.id.navigation_item_1:
-                currentFragment = new DictionariesListFragment();
-                toolbar.setTitle(R.string.nav_menu_item_dictionaries);
-                mDrawerLayout.closeDrawer(GravityCompat.START);
-                break;
-
-            case R.id.navigation_item_2:
-                mDrawerLayout.closeDrawer(GravityCompat.START);
-                break;
+    private void initDrawerLaunchSelection() {
+        int dictionaryId = container.getPreferencesManager().loadDictionaryId();
+        if(dictionaryId >= 0) { // -1 if dictionary wasn't save
+            selectedNavItem = R.id.navigation_item_categories;
+            Dictionary dictionary = container.getDbApi().getDictionaryById(dictionaryId);
+            settings.setSelectedDictionary(dictionary);
+            settings.setTargetLanguage(dictionary.getCodeTargetLanguage());
+        } else {
+            selectedNavItem = R.id.navigation_item_dictionaries;
         }
-        fragmentTransaction.replace(R.id.content, currentFragment);
-        fragmentTransaction.addToBackStack("");
-        fragmentTransaction.commit();
+        itemSelection(selectedNavItem);
+        drawer.setCheckedItem(selectedNavItem);
+    }
+
+    private void itemSelection(int selectedId) {
+        switch(selectedId){
+            case R.id.navigation_item_dictionaries: {
+                openDictionaries();
+                drawerLayout.closeDrawer(GravityCompat.START);
+                break;
+            }
+            case R.id.navigation_item_categories: {
+                openDictionaryCategories(container.getSettings().getSelectedDictionary());
+                drawerLayout.closeDrawer(GravityCompat.START);
+                break;
+            }
+            case R.id.navigation_item_exit: {
+                finish();
+                break;
+            }
+        }
 
     }
 
@@ -112,8 +121,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
         menuItem.setChecked(true);
-        mSelectedId=menuItem.getItemId();
-        itemSelection(mSelectedId);
+        selectedNavItem = menuItem.getItemId();
+        itemSelection(selectedNavItem);
         return true;
     }
 
@@ -121,25 +130,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         super.onSaveInstanceState(outState, outPersistentState);
         //save selected item so it will remains same even after orientation change
-        outState.putInt("SELECTED_ID", mSelectedId);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        //bus.register(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        //bus.unregister(this);
+       // outState.putInt("SELECTED_ID", selectedNavItem); // TODO: 29.04.2016 Impl state saving
     }
 
     @Override
     public void onBackPressed() {
-        if(mDrawerLayout.isDrawerOpen(mDrawer)) {
-            mDrawerLayout.closeDrawer(mDrawer);
+        if(drawerLayout.isDrawerOpen(drawer)) {
+            drawerLayout.closeDrawer(drawer);
         } else {
             if(fragmentManager.getBackStackEntryCount() > 0) {
                 fragmentManager.popBackStack();
@@ -152,15 +149,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     // Заглушка, работа с меню
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
+        //getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     // Заглушка, работа с меню
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        Log.d("mylog", "ID: " + id);
         return super.onOptionsItemSelected(item);
     }
 
@@ -170,23 +165,36 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         Log.d("mylog", "on activity Destroy()");
     }
 
-    @Subscribe
-    public void onDictionarySelected(Dictionary dictionary) {
-        Log.d("mylog", "onNewDictionarySelected");
-        this.selectedDictionary = dictionary;
+    private void openDictionaryCategories(Dictionary dictionary) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Fragment currentFragment = new CategoriesListFragment();
         Bundle arguments = new Bundle();
-        arguments.putParcelable(Transfer.SELECTED_DICTIONARY.toString(), selectedDictionary);
+        arguments.putParcelable(Transfer.SELECTED_DICTIONARY.toString(), dictionary);
         currentFragment.setArguments(arguments);
-        toolbar.setTitle("Категории (" + selectedDictionary.getCodeTargetLanguage() + ")");
-        container.getSettings().setTargetLanguage(selectedDictionary.getCodeTargetLanguage());
-        container.getSettings().setSelectedDictionary(selectedDictionary);
         fragmentTransaction.replace(R.id.content, currentFragment);
         fragmentTransaction.addToBackStack("");
         fragmentTransaction.commit();
     }
 
+    private void openDictionaries() {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        Fragment currentFragment = new DictionariesListFragment();
+        fragmentTransaction.replace(R.id.content, currentFragment);
+        fragmentTransaction.addToBackStack("");
+        fragmentTransaction.commit();
+    }
+
+    @Subscribe
+    public void processDictionarySelectedEvent(DictionarySelectedEvent event) {
+        Log.d("mylog", "onNewDictionarySelected");
+        Dictionary dictionary = event.getDictionary();
+        settings.setSelectedDictionary(dictionary);
+        settings.setTargetLanguage(dictionary.getCodeTargetLanguage());
+        preferencesManager.saveDictionaryId(dictionary);
+        openDictionaryCategories(dictionary);
+    }
+
+    // FIXME: 29.04.2016 impl event to fix this
     @Subscribe
     public void onCategorySelected(Category category) {
         Log.d("mylog_ui", "category selected");
@@ -195,12 +203,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         Bundle arguments = new Bundle();
         arguments.putParcelable(Transfer.SELECTED_CATEGORY.toString(), category);
         currentFragment.setArguments(arguments);
-        toolbar.setTitle(category.getName());
         fragmentTransaction.replace(R.id.content, currentFragment);
         fragmentTransaction.addToBackStack("");
         fragmentTransaction.commit();
     }
 
+    // FIXME: 29.04.2016 impl some events to fix this
     @Subscribe
     public void onFragmentRequest(FragmentRequest request) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -211,18 +219,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
             }
             case ADD_CATEGORY: {
-                //currentFragment = new CreateCategoryFragment();
-                //arguments.putParcelable(Transfer.SELECTED_DICTIONARY.toString(), selectedDictionary);
-                //toolbar.setTitle("Создание категории");
                 PickCategoryDialogFragment pickCategoryDialogFragment = new PickCategoryDialogFragment();
                 pickCategoryDialogFragment.show(getFragmentManager(), "pick_category");
                 return;
             }
             case CATEGORY_ADDED: {
+                Dictionary dictionary = container.getSettings().getSelectedDictionary();
                 currentFragment = new CategoriesListFragment();
-                arguments.putParcelable(Transfer.SELECTED_DICTIONARY.toString(), selectedDictionary);
+                arguments.putParcelable(Transfer.SELECTED_DICTIONARY.toString(), dictionary);
                 currentFragment.setArguments(arguments);
-                toolbar.setTitle("Категории (" + selectedDictionary.getCodeTargetLanguage() + ")");
                 break;
             }
         }
@@ -240,5 +245,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Subscribe
     public void processUpdateWordsListEvent(UpdateWordsListEvent event) {
         Log.d("mylog", "processUpdateWordsListEvent MAIN activity");
+    }
+
+    @Subscribe
+    public void processToolbarTitleChangedEvent(ToolbarTitleChangedEvent event) {
+        String title = event.getToolbarTitle();
+        toolbar.setTitle(title);
     }
 }

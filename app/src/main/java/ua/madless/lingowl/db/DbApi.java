@@ -27,15 +27,17 @@ public class DbApi {
     DaoDictWord daoDictWord;
 
     private static DbApi instance;
+    private Context context;
 
-    public static DbApi getInstance(Context context) {
+    public static DbApi getInstance() {
         if(instance == null) {
-            instance = new DbApi(context);
+            instance = new DbApi();
         }
         return instance;
     }
 
-    private DbApi(Context context) {
+    public void setContext(Context context) {
+        this.context = context;
         this.dbManager = new DBManager(context);
         daoDictionary = new DaoDictionary(dbManager);
         daoCategory = new DaoCategory(dbManager);
@@ -49,8 +51,8 @@ public class DbApi {
         int wordId = daoWord.getNextId();
         word.setId(wordId);
         daoWord.addWord(word);
-        daoDictionary.incrementWordCount(dictionary);
-        daoCategory.incrementWordCount(category);
+        daoDictionary.incrementWordCount(dictionary, 1);
+        daoCategory.incrementWordCount(category, 1);
         daoCatWord.linkCategoryWithWord(category, word);
         daoDictWord.linkDictionaryWithWord(dictionary, word);
     }
@@ -59,10 +61,10 @@ public class DbApi {
         int wordId = daoWord.getNextId();
         word.setId(wordId);
         daoWord.addWord(word);
-        daoDictionary.incrementWordCount(dictionary);
+        daoDictionary.incrementWordCount(dictionary, 1);
         for (int i = 0; i < categories.size(); i++) {
             Category category = categories.get(i);
-            daoCategory.incrementWordCount(category);
+            daoCategory.incrementWordCount(category, 1);
             daoCatWord.linkCategoryWithWord(category, word);
         }
         daoDictWord.linkDictionaryWithWord(dictionary, word);
@@ -71,23 +73,41 @@ public class DbApi {
     public void removeWordFromAllCategories(Dictionary dictionary, Word word) {
         ArrayList<Category> categories = daoCategory.getCategoriesInWord(word);
         for (Category category: categories) {
-            daoCategory.decrementWordCount(category);
+            daoCategory.decrementWordCount(category, 1);
             daoCatWord.unlinkCategoryWithWord(category, word);
         }
-        daoDictionary.decrementWordCount(dictionary);
+        daoDictionary.decrementWordCount(dictionary, 1);
         daoDictWord.unlinkDictionaryWithWord(dictionary, word);
         daoWord.deleteWord(word);
     }
 
     public void removeWordFromCurrentCategory(Dictionary dictionary, Category category, Word word) {
-        daoCategory.decrementWordCount(category);
+        daoCategory.decrementWordCount(category, 1);
         daoCatWord.unlinkCategoryWithWord(category, word);
         ArrayList<Category> categories = daoCategory.getCategoriesInWord(word);
         if(categories.isEmpty()) {
-            daoDictionary.decrementWordCount(dictionary);
+            daoDictionary.decrementWordCount(dictionary, 1);
             daoDictWord.unlinkDictionaryWithWord(dictionary, word);
             daoWord.deleteWord(word);
         }
+    }
+
+    public void removeCategoryWithAllWords(Dictionary dictionary, Category category) {
+        ArrayList<Word> words = daoWord.getWordsInCategory(category);
+        for (Word word: words) {
+            removeWordFromCurrentCategory(dictionary, category, word);
+        }
+        daoDictCat.unlinkDictionaryWithCategory(dictionary, category);
+        daoCategory.deleteCategory(category);
+    }
+
+    public void removeCategoryWithoutAllWords(Dictionary dictionary, Category category) {
+        ArrayList<Word> words = daoWord.getWordsInCategory(category);
+        for (Word word: words) {
+            daoCatWord.unlinkCategoryWithWord(category, word);
+        }
+        daoDictCat.unlinkDictionaryWithCategory(dictionary, category);
+        daoCategory.deleteCategory(category);
     }
 
     public void addCategory(Dictionary dictionary, Category category) {
@@ -126,6 +146,10 @@ public class DbApi {
     public ArrayList<Word> getWordsInDictionary(Dictionary dictionary) {
         ArrayList<Word> words = daoWord.getWordsInDictionary(dictionary);
         return words;
+    }
+
+    public Dictionary getDictionaryById(int id) {
+        return daoDictionary.getDictionaryById(id);
     }
 
 }

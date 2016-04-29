@@ -1,51 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <RelativeLayout
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/dimen_10"
+    android:paddingBottom="@dimen/dimen_10">
+
+    <ImageView
+        android:layout_width="@dimen/dimen_30"
+        android:layout_height="@dimen/dimen_30"
+        android:id="@+id/imageViewCategoryItemIcon"
+        android:src="@mipmap/ic_category_default"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="10dp" />
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:layout_marginBottom="@dimen/dimen_2"
-        android:background="@color/color_white">
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:id="@+id/imageViewCategoryItemIcon"
-            android:src="@mipmap/ic_category_default"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="10dp" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Английский"
+        android:id="@+id/textViewCategoryItemTitle"
+        android:layout_alignParentTop="true"
+        android:textColor="@color/color_black"
+        android:gravity="center_vertical"
+        android:layout_alignBottom="@+id/imageViewCategoryItemIcon"
+        android:layout_toEndOf="@+id/imageViewCategoryItemIcon"
+        android:layout_toRightOf="@+id/imageViewCategoryItemIcon"
+        android:layout_toStartOf="@+id/textViewCategoryItemCounter"
+        android:layout_toLeftOf="@+id/textViewCategoryItemCounter"
+        android:singleLine="true" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Английский"
-            android:id="@+id/textViewCategoryItemTitle"
-            android:layout_alignParentTop="true"
-            android:textColor="@color/color_black"
-            android:gravity="center_vertical"
-            android:layout_alignBottom="@+id/imageViewCategoryItemIcon"
-            android:layout_toEndOf="@+id/imageViewCategoryItemIcon"
-            android:layout_toRightOf="@+id/imageViewCategoryItemIcon"
-            android:layout_toStartOf="@+id/textViewCategoryItemCounter"
-            android:layout_toLeftOf="@+id/textViewCategoryItemCounter"
-            android:singleLine="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="367"
-            android:id="@+id/textViewCategoryItemCounter"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignBottom="@+id/textViewCategoryItemTitle"
-            android:textColor="@color/color_gray"
-            android:gravity="center_vertical"
-            android:layout_marginLeft="@dimen/dimen_10"
-            android:layout_marginRight="@dimen/dimen_20" />
-    </RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="367"
+        android:id="@+id/textViewCategoryItemCounter"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@+id/textViewCategoryItemTitle"
+        android:textColor="@color/color_gray"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="@dimen/dimen_10"
+        android:layout_marginRight="@dimen/dimen_20" />
 </RelativeLayout>

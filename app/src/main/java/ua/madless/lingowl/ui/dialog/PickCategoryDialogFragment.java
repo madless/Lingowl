@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -67,7 +66,6 @@ public class PickCategoryDialogFragment extends DialogFragment implements View.O
         imageViewShowIcons.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Show icons", Toast.LENGTH_SHORT).show();
                 layoutContent.setVisibility(View.VISIBLE);
                 Resources r = getResources();
                 final float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, r.getDisplayMetrics());
@@ -89,12 +87,12 @@ public class PickCategoryDialogFragment extends DialogFragment implements View.O
                 String title = editTextAddCategoryName.getText().toString();
                 if(!title.isEmpty()) {
                     Category category = new Category(title, iconIndex);
-                    appContainer.getDbApi(context).addCategory(appContainer.getSettings().getSelectedDictionary(), category);
+                    appContainer.getDbApi().addCategory(appContainer.getSettings().getSelectedDictionary(), category);
                     eventBus.post(FragmentRequest.CATEGORY_ADDED);
-                    Toast.makeText(getActivity(), "Категория добавлена", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.dialog_category_added, Toast.LENGTH_SHORT).show();
                     dismiss();
                 } else {
-                    Toast.makeText(getActivity(), "Введите название категории!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.dialog_category_input_category_name, Toast.LENGTH_SHORT).show();
                 }
                 break;
             }
@@ -114,7 +112,7 @@ public class PickCategoryDialogFragment extends DialogFragment implements View.O
     }
 
     private void initTable() {
-        ArrayList<Bitmap> bitmaps = getBitmapList(getActivity());
+        ArrayList<Bitmap> bitmaps = getBitmapList();
         int columnNum = 5;
         int lastRowColumnNum = bitmaps.size() % columnNum;
         int rowNum = (bitmaps.size() / columnNum) + (lastRowColumnNum != 0 ? 1 : 0);
@@ -143,11 +141,10 @@ public class PickCategoryDialogFragment extends DialogFragment implements View.O
         }
     }
 
-    public ArrayList<Bitmap> getBitmapList(Context context) {
+    public ArrayList<Bitmap> getBitmapList() {
         ArrayList<Bitmap> bitmaps = new ArrayList<>();
         IconManager iconManager = new IconManager(getActivity());
         for(int i = 0; true; i++) {
-            //InputStream inputStream = context.getAssets().open("ic_category_" + i + ".png");
             Bitmap bitmap = iconManager.getCategoryIconBitmapById(i);
             if(bitmap != null) {
                 bitmaps.add(bitmap);
@@ -155,7 +152,6 @@ public class PickCategoryDialogFragment extends DialogFragment implements View.O
                 break;
             }
         }
-        Log.d("mylog1", "bitmaps: " + bitmaps);
         return bitmaps;
     }
 }

@@ -87,12 +87,42 @@ public class DaoDictionary extends RealModelDao {
         return dictionaries;
     }
 
-    public void incrementWordCount(Dictionary dictionary) {
-        countOperation(dictionary, 1);
+    public Dictionary getDictionaryById(int id) {
+        dbManager.open();
+        SQLiteDatabase db = dbManager.getDatabase();
+        Dictionary dictionary = null;
+        String selection = FIELD_ID + " = ?";
+        String[] selectionArgs = new String[]{String.valueOf(id)};
+        Cursor dictionaryCursor = db.query(TABLE_NAME, null, selection, selectionArgs, null, null, null); //(String table, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy)
+        if(dictionaryCursor.moveToFirst()) {
+            int nameColIndex = dictionaryCursor.getColumnIndex(FIELD_NAME);
+            int codeTargetLanguageColIndex = dictionaryCursor.getColumnIndex(FIELD_CODE_TARGET_LANGUAGE);
+            int codeNativeLanguageColIndex = dictionaryCursor.getColumnIndex(FIELD_CODE_NATIVE_LANGUAGE);
+            int iconIdColIndex = dictionaryCursor.getColumnIndex(FIELD_ICON_ID);
+            int wordCounterColIndex = dictionaryCursor.getColumnIndex(FIELD_WORD_COUNTER);
+            int dictTypeColIndex = dictionaryCursor.getColumnIndex(FIELD_DICT_TYPE);
+
+            String name = dictionaryCursor.getString(nameColIndex);
+            String codeTargetLanguage = dictionaryCursor.getString(codeTargetLanguageColIndex);
+            String codeNativeLanguage = dictionaryCursor.getString(codeNativeLanguageColIndex);
+            int iconId = dictionaryCursor.getInt(iconIdColIndex);
+            int wordCounter = dictionaryCursor.getInt(wordCounterColIndex);
+            int dictType = dictionaryCursor.getInt(dictTypeColIndex);
+            dictionary = new Dictionary(id, name, codeTargetLanguage, codeNativeLanguage, iconId, wordCounter, dictType);
+        } else {
+            Log.d("mylog", "NO ROWS IN TABLE " + TABLE_NAME);
+        }
+        dictionaryCursor.close();
+        dbManager.close();
+        return dictionary;
     }
 
-    public void decrementWordCount(Dictionary dictionary) {
-        countOperation(dictionary, -1);
+    public void incrementWordCount(Dictionary dictionary, int count) {
+        countOperation(dictionary, count);
+    }
+
+    public void decrementWordCount(Dictionary dictionary, int count) {
+        countOperation(dictionary, -count);
     }
 
     public void countOperation(Dictionary dictionary, int i) {

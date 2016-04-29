@@ -1,4 +1,4 @@
-package ua.madless.lingowl.ui.fragment;
+package ua.madless.lingowl.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,7 +21,6 @@ import ua.madless.lingowl.core.manager.IntentHelper;
 import ua.madless.lingowl.core.model.db_model.Dictionary;
 import ua.madless.lingowl.core.model.model_for_ui.CheckableCategory;
 import ua.madless.lingowl.core.util.CategoryUtil;
-import ua.madless.lingowl.ui.activity.BaseActivity;
 import ua.madless.lingowl.ui.adapter.CategoriesListPickerAdapter;
 
 /**
@@ -56,7 +55,7 @@ public class CategoriesPickerActivity extends BaseActivity {
         bus = LingllamaBus.getBus();
         recyclerViewCategoriesList.setAdapter(categoriesListPickerAdapter);
         buttonAddCategory.setOnClickListener(new FabOnClickListener());
-        setToolbar();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 
@@ -74,6 +73,11 @@ public class CategoriesPickerActivity extends BaseActivity {
                 Toast.makeText(this, "Add", Toast.LENGTH_SHORT).show();
                 setResult(IntentHelper.RESULT_CODE_OK, getSelectedCategoriesData());
                 this.finish();
+                break;
+            }
+            case android.R.id.home: {
+                onBackPressed();
+                break;
             }
         }
         return super.onOptionsItemSelected(item);

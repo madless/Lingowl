@@ -8,7 +8,12 @@ import ua.madless.lingowl.core.model.db_model.Dictionary;
 public class SettingsHolder {
     private static SettingsHolder instance;
 
+    private SettingsHolder() {}
+
     public static SettingsHolder getInstance() {
+        if(instance == null) {
+            instance = new SettingsHolder();
+        }
         return instance;
     }
 
@@ -31,7 +36,6 @@ public class SettingsHolder {
     public void setNativeLanguage(String nativeLanguage) {
         this.nativeLanguage = nativeLanguage;
     }
-
 
     public Dictionary getSelectedDictionary() {
         return selectedDictionary;

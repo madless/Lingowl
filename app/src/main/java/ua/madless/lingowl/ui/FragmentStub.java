@@ -13,6 +13,7 @@ import ua.madless.lingowl.R;
  * Created by madless on 06.01.2016.
  */
 
+@Deprecated
 public class FragmentStub extends Fragment {
     @Nullable
     @Override

@@ -13,13 +13,12 @@ import android.view.ViewGroup;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
-import com.squareup.otto.Bus;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.util.ArrayList;
 
 import ua.madless.lingowl.R;
-import ua.madless.lingowl.bus.LingllamaBus;
+import ua.madless.lingowl.bus.events.ToolbarTitleChangedEvent;
 import ua.madless.lingowl.core.constants.Constants;
 import ua.madless.lingowl.core.constants.FragmentRequest;
 import ua.madless.lingowl.core.constants.Transfer;
@@ -48,14 +47,12 @@ public class CategoriesListFragment extends BaseListFragment {
         recyclerViewCategoriesList.setItemAnimator(itemAnimator);
 
         selectedDictionary = getArguments().getParcelable(Transfer.SELECTED_DICTIONARY.toString());
-
         Category all = new Category(Constants.CATEGORY_MAIN_ID, getActivity().getString(R.string.category_all_words), 0, selectedDictionary.getWordCounter());
         categories = dbApi.getCategoriesInDictionary(selectedDictionary);
         categories.add(0, all);
 
         categoriesListAdapter = new CategoriesListAdapter(getActivity(), categories);
 
-        bus = LingllamaBus.getBus();
         recyclerViewCategoriesList.setAdapter(categoriesListAdapter);
         recyclerViewCategoriesList.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), recyclerViewCategoriesList, this));
         recyclerViewCategoriesList.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getActivity()).build());
@@ -65,9 +62,14 @@ public class CategoriesListFragment extends BaseListFragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        bus.post(new ToolbarTitleChangedEvent(String.format(getString(R.string.toolbar_title_categories), selectedDictionary.getCodeTargetLanguage())));
+    }
+
+    @Override
     public void onRecyclerViewItemClick(View view, int position) {
-        Bus bus = LingllamaBus.getBus();
-        bus.post(categories.get(position));
+        bus.post(categories.get(position)); // FIXME: 29.04.2016
     }
 
     @Override
@@ -88,7 +90,7 @@ public class CategoriesListFragment extends BaseListFragment {
     }
 
     public void showPopup(View item, final int position) {
-        Category category = categories.get(position);
+        final Category category = categories.get(position);
         PopupMenu categoryPopup = new PopupMenu(getActivity(), item.findViewById(R.id.textViewCategoryItemTitle));
         categoryPopup.inflate(R.menu.popup_category_item_menu);
         categoryPopup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -102,6 +104,7 @@ public class CategoriesListFragment extends BaseListFragment {
                     case R.id.popup_action_delete_category: {
                         categories.remove(position);
                         categoriesListAdapter.notifyItemRemoved(position);
+                        dbApi.removeCategoryWithoutAllWords(selectedDictionary, category);
                         break;
                     }
                 }
