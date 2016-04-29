@@ -17,6 +17,15 @@ public class StringConverter {
             case "глагол" : {
                 return "глаг.";
             }
+            case "междометие" : {
+                return "междомет.";
+            }
+            case "местоимение" : {
+                return "местоим.";
+            }
+            case "неизмененяемое" : {
+                return "неизменяемое";
+            }
             default: {
                 return partOfSpeech; // TODO: 29.04.2016 IMPLEMENT ALL 
             }

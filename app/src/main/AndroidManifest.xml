@@ -14,14 +14,16 @@
             android:name=".ui.activity.MainActivity"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden"
             android:theme="@style/NavActivityTheme"
-            android:configChanges="orientation|screenSize">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.CreateNewWordActivity"/>
-        <activity android:name=".ui.fragment.CategoriesPickerActivity"/>
+        <activity android:name=".ui.activity.CreateNewWordActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ui.fragment.CategoriesPickerActivity"
+            android:screenOrientation="portrait"/>
 
     </application>
 
