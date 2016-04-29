@@ -6,6 +6,7 @@ package ua.madless.lingowl.core.util;
 public class StringConverter {
 
     public static String getShorterPartOfSpeech(String partOfSpeech) {
+        // TODO: 29.04.2016 Translate all returns
         switch (partOfSpeech) {
             case "существительное": {
                 return "сущ.";
@@ -17,7 +18,7 @@ public class StringConverter {
                 return "глаг.";
             }
             default: {
-                return "NOT IMPL";
+                return partOfSpeech; // TODO: 29.04.2016 IMPLEMENT ALL 
             }
         }
     }

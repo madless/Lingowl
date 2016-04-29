@@ -68,6 +68,28 @@ public class DbApi {
         daoDictWord.linkDictionaryWithWord(dictionary, word);
     }
 
+    public void removeWordFromAllCategories(Dictionary dictionary, Word word) {
+        ArrayList<Category> categories = daoCategory.getCategoriesInWord(word);
+        for (Category category: categories) {
+            daoCategory.decrementWordCount(category);
+            daoCatWord.unlinkCategoryWithWord(category, word);
+        }
+        daoDictionary.decrementWordCount(dictionary);
+        daoDictWord.unlinkDictionaryWithWord(dictionary, word);
+        daoWord.deleteWord(word);
+    }
+
+    public void removeWordFromCurrentCategory(Dictionary dictionary, Category category, Word word) {
+        daoCategory.decrementWordCount(category);
+        daoCatWord.unlinkCategoryWithWord(category, word);
+        ArrayList<Category> categories = daoCategory.getCategoriesInWord(word);
+        if(categories.isEmpty()) {
+            daoDictionary.decrementWordCount(dictionary);
+            daoDictWord.unlinkDictionaryWithWord(dictionary, word);
+            daoWord.deleteWord(word);
+        }
+    }
+
     public void addCategory(Dictionary dictionary, Category category) {
         int categoryId = daoCategory.getNextId();
         category.setId(categoryId);

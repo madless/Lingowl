@@ -18,18 +18,18 @@
             android:clickable="true"
             android:focusable="true"
             android:background="?android:attr/selectableItemBackground"/>
-
     </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/buttonAddWord"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginRight="@dimen/dimen_16"
+        android:layout_marginBottom="@dimen/dimen_16"
         android:src="@mipmap/ic_plus"
         app:fabSize="normal"
-        app:layout_anchor="@id/coordinatorLayout"
+        app:layout_anchor="@id/recyclerViewWordsList"
         app:layout_anchorGravity="bottom|right|end"
-        app:rippleColor="#F06292"/>
+        app:rippleColor="@color/colorAccent"
+        app:layout_behavior="ua.madless.lingowl.ui.view.fab_behavior.ScrollAwareFABVanishBehavior"/>
 </android.support.design.widget.CoordinatorLayout>

@@ -36,6 +36,15 @@ public class DaoCatWord extends BaseDao {
         dbManager.close();
     }
 
+    public void unlinkCategoryWithWord(Category category, Word word) {
+        dbManager.open();
+        SQLiteDatabase db = dbManager.getDatabase();
+        String whereClause =  LINK_FIELD_ID_CAT + " = ? " + " AND " + LINK_FIELD_ID_WORD + " = ? ";
+        String[] whereArgs = new String[]{String.valueOf(category.getId()), String.valueOf(word.getId())};
+        db.delete(LINK_TABLE_NAME, whereClause, whereArgs);
+        dbManager.close();
+    }
+
     @Override
     public String getTableName() {
         return LINK_TABLE_NAME;

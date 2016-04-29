@@ -7,14 +7,14 @@
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:layout_marginBottom="2dp"
+        android:layout_marginBottom="@dimen/dimen_2"
         android:background="@color/color_white">
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:id="@+id/imageViewCategoryItemIcon"
             android:src="@mipmap/ic_category_default"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="15dp"
             android:layout_marginRight="10dp" />
 
         <TextView
@@ -45,7 +45,7 @@
             android:layout_alignBottom="@+id/textViewCategoryItemTitle"
             android:textColor="@color/color_gray"
             android:gravity="center_vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp" />
+            android:layout_marginLeft="@dimen/dimen_10"
+            android:layout_marginRight="@dimen/dimen_20" />
     </RelativeLayout>
 </RelativeLayout>

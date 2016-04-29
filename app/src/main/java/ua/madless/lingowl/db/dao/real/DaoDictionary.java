@@ -6,10 +6,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
-import ua.madless.lingowl.db.DBManager;
 import ua.madless.lingowl.core.model.db_model.Dictionary;
+import ua.madless.lingowl.db.DBManager;
 
 /**
  * Created by madless on 02.01.2016.
@@ -89,16 +88,21 @@ public class DaoDictionary extends RealModelDao {
     }
 
     public void incrementWordCount(Dictionary dictionary) {
+        countOperation(dictionary, 1);
+    }
+
+    public void decrementWordCount(Dictionary dictionary) {
+        countOperation(dictionary, -1);
+    }
+
+    public void countOperation(Dictionary dictionary, int i) {
         dbManager.open();
         SQLiteDatabase db = dbManager.getDatabase();
         ContentValues dictionaryRow = new ContentValues();
-        dictionaryRow.put(FIELD_WORD_COUNTER, dictionary.getWordCounter() + 1);
-        String whereClause = FIELD_ID + " = " + "?";
+        dictionaryRow.put(FIELD_WORD_COUNTER, dictionary.getWordCounter() + i);
+        String whereClause = FIELD_ID + " = ?";
         String[] whereArgs = new String[]{String.valueOf(dictionary.getId())};
-        Log.d("dmikhov", "Dictionary:" + dictionary.getName());
-        Log.d("dmikhov", Arrays.toString(whereArgs));
         db.update(TABLE_NAME, dictionaryRow, whereClause, whereArgs);
-        Log.d("mylog", "dictionary incremented: " + dictionary.toString());
         dbManager.close();
     }
 

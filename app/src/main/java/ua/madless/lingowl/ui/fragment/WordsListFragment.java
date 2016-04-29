@@ -52,7 +52,6 @@ public class WordsListFragment extends BaseListFragment implements View.OnClickL
         recyclerViewWordsList.setLayoutManager(layoutManager);
         recyclerViewWordsList.setItemAnimator(itemAnimator);
         recyclerViewWordsList.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), recyclerViewWordsList, this));
-        //recyclerViewWordsList.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
         recyclerViewWordsList.addItemDecoration(new HorizontalDividerItemDecoration.Builder(getActivity()).build());
         updateWords();
         setHasOptionsMenu(true);
@@ -109,6 +108,7 @@ public class WordsListFragment extends BaseListFragment implements View.OnClickL
                         Toast.makeText(getActivity(), "del " + word.getText(), Toast.LENGTH_SHORT);
                         words.remove(position);
                         wordsListAdapter.notifyItemRemoved(position);
+                        dbApi.removeWordFromAllCategories(dictionary, word);
                         break;
                     }
                     default: {
@@ -132,5 +132,4 @@ public class WordsListFragment extends BaseListFragment implements View.OnClickL
             }
         }
     }
-
 }

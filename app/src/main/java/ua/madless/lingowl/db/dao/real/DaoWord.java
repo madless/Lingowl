@@ -207,6 +207,15 @@ public class DaoWord extends RealModelDao {
         return maxId + 1;
     }
 
+    public void deleteWord(Word word) {
+        dbManager.open();
+        SQLiteDatabase db = dbManager.getDatabase();
+        String whereClause = FIELD_ID + " = ? ";
+        String[] whereArgs = new String[]{String.valueOf(word.getId())};
+        db.delete(TABLE_NAME, whereClause, whereArgs);
+        dbManager.close();
+    }
+
     @Override
     public String getTableName() {
         return TABLE_NAME;

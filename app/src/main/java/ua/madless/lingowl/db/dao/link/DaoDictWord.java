@@ -3,10 +3,10 @@ package ua.madless.lingowl.db.dao.link;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
-import ua.madless.lingowl.db.DBManager;
-import ua.madless.lingowl.db.dao.BaseDao;
 import ua.madless.lingowl.core.model.db_model.Dictionary;
 import ua.madless.lingowl.core.model.db_model.Word;
+import ua.madless.lingowl.db.DBManager;
+import ua.madless.lingowl.db.dao.BaseDao;
 
 /**
  * Created by madless on 02.01.2016.
@@ -33,6 +33,15 @@ public class DaoDictWord extends BaseDao {
         wordCatRow.put(LINK_FIELD_ID_WORD, word.getId());
         wordCatRow.put(LINK_FIELD_ID_DICT, dictionary.getId());
         db.insert(LINK_TABLE_NAME, null, wordCatRow);
+        dbManager.close();
+    }
+
+    public void unlinkDictionaryWithWord(Dictionary dictionary, Word word) {
+        dbManager.open();
+        SQLiteDatabase db = dbManager.getDatabase();
+        String whereClause = LINK_FIELD_ID_DICT + " = ? " + " AND " + LINK_FIELD_ID_WORD + " = ? ";
+        String[] whereArgs = new String[]{String.valueOf(dictionary.getId()), String.valueOf(word.getId())};
+        db.delete(LINK_TABLE_NAME, whereClause, whereArgs);
         dbManager.close();
     }
 

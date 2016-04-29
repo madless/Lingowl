@@ -54,7 +54,7 @@ public class DaoCategory extends RealModelDao {
         dbManager.open();
         SQLiteDatabase db = dbManager.getDatabase();
         ArrayList<Category> categories = new ArrayList<>();
-        String selection = "SELECT c." + FIELD_ID + ", c." + FIELD_NAME +
+        String selection = "SELECT c." + FIELD_ID + ", c." + FIELD_NAME + ", c." + FIELD_ICON_ID + ", c." +FIELD_WORD_COUNTER +
                 " FROM " + TABLE_NAME + " as c, " + DaoCatWord.LINK_TABLE_NAME + " as wc " +
                 " WHERE wc." + DaoCatWord.LINK_FIELD_ID_WORD + " = ? AND c." + FIELD_ID + " = wc." + DaoCatWord.LINK_FIELD_ID_CAT;
         String[] selectionArgs = {String.valueOf(word.getId())};
@@ -139,14 +139,23 @@ public class DaoCategory extends RealModelDao {
     }
 
     public void incrementWordCount(Category category) {
+        countOperation(category, 1);
+        Log.d("mylog", "category incremented: " + category.toString());
+    }
+
+    public void decrementWordCount(Category category) {
+        countOperation(category, -1);
+        Log.d("mylog", "category decremented: " + category.toString());
+    }
+
+    public void countOperation(Category category, int i) {
         dbManager.open();
         SQLiteDatabase db = dbManager.getDatabase();
         ContentValues dictionaryRow = new ContentValues();
-        dictionaryRow.put(FIELD_WORD_COUNTER, category.getWordCounter() + 1);
+        dictionaryRow.put(FIELD_WORD_COUNTER, category.getWordCounter() + i);
         String whereClause = FIELD_ID + " = ?";
         String[] whereArgs = new String[]{String.valueOf(category.getId())};
         db.update(TABLE_NAME, dictionaryRow, whereClause, whereArgs);
-        Log.d("mylog", "category incremented: " + category.toString());
         dbManager.close();
     }
 
